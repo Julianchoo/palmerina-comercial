@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
 
 // IMPORTANT! ID fields should ALWAYS use UUID types, EXCEPT the BetterAuth tables.
 
@@ -67,6 +67,17 @@ export const account = pgTable(
     index("account_user_id_idx").on(table.userId),
     index("account_provider_account_idx").on(table.providerId, table.accountId),
   ]
+);
+
+export const whatsappClicks = pgTable(
+  "whatsapp_clicks",
+  {
+    id: serial("id").primaryKey(),
+    page: text("page").notNull(),
+    source: text("source").notNull(),
+    clickedAt: timestamp("clicked_at").defaultNow().notNull(),
+  },
+  (table) => [index("whatsapp_clicks_page_idx").on(table.page)]
 );
 
 export const verification = pgTable("verification", {

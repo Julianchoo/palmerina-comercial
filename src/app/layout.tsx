@@ -1,78 +1,46 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Roboto } from "next/font/google";
 import "./globals.css";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
+import { WhatsAppFloat } from "@/components/shared/WhatsAppFloat";
 import type { Metadata } from "next";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const roboto = Roboto({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-roboto",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Agentic Coding Boilerplate",
-    template: "%s | Agentic Coding Boilerplate",
+    default: "La Palmerina – Tierra Comercial Canning",
+    template: "%s | La Palmerina",
   },
   description:
-    "Complete agentic coding boilerplate with authentication, database, AI integration, and modern tooling - perfect for building AI-powered applications and autonomous agents by Leon van Zyl",
+    "1000m de frente sobre Ruta Provincial 58, Canning. Tierra comercial premium con acceso directo a la nueva Autopista Presidente Perón.",
   keywords: [
-    "Next.js",
-    "React",
-    "TypeScript",
-    "AI",
-    "OpenRouter",
-    "Boilerplate",
-    "Authentication",
-    "PostgreSQL",
+    "tierra comercial canning",
+    "lote ruta 58",
+    "inversión inmobiliaria",
+    "desarrollo comercial",
+    "La Palmerina",
+    "autopista presidente perón",
   ],
-  authors: [{ name: "Leon van Zyl" }],
-  creator: "Leon van Zyl",
   openGraph: {
     type: "website",
-    locale: "en_US",
-    siteName: "Agentic Coding Boilerplate",
-    title: "Agentic Coding Boilerplate",
+    locale: "es_AR",
+    siteName: "La Palmerina",
+    title: "La Palmerina – Tierra Comercial Canning",
     description:
-      "Complete agentic coding boilerplate with authentication, database, AI integration, and modern tooling",
+      "1000m de frente sobre Ruta Provincial 58, Canning. Tierra comercial premium.",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Agentic Coding Boilerplate",
-    description:
-      "Complete agentic coding boilerplate with authentication, database, AI integration, and modern tooling",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
-
-// JSON-LD structured data for SEO
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  name: "Agentic Coding Boilerplate",
-  description:
-    "Complete agentic coding boilerplate with authentication, database, AI integration, and modern tooling",
-  applicationCategory: "DeveloperApplication",
-  operatingSystem: "Any",
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-  },
-  author: {
-    "@type": "Person",
-    name: "Leon van Zyl",
-  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -81,27 +49,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <SiteHeader />
-          <main id="main-content" className="flex-1">{children}</main>
-          <SiteFooter />
-          <Toaster richColors position="top-right" />
-        </ThemeProvider>
+    <html lang="es" className={`${inter.variable} ${roboto.variable}`}>
+      <body className="antialiased min-h-screen overflow-x-hidden" style={{ fontFamily: "var(--font-roboto), system-ui, sans-serif" }}>
+        {children}
+        <WhatsAppFloat />
       </body>
     </html>
   );
