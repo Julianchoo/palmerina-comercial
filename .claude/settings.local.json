@@ -13,7 +13,10 @@
       "Bash(git log:*)",
       "Bash(find:*)",
       "Bash(git checkout:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git commit -m ' *)",
+      "Bash(git commit -m 'fix: remove starter kit API routes, auth, and DB — marketing site only *)",
+      "Bash(git push *)"
     ]
   },
   "enableAllProjectMcpServers": true,
