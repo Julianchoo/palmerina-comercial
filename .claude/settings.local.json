@@ -16,7 +16,8 @@
       "Bash(cat:*)",
       "Bash(git commit -m ' *)",
       "Bash(git commit -m 'fix: remove starter kit API routes, auth, and DB — marketing site only *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git commit -m 'fix: remove unused site-header component with deleted auth import *)"
     ]
   },
   "enableAllProjectMcpServers": true,
