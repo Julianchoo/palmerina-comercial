@@ -82,6 +82,14 @@ Stack skills compose: invoking `nextjs` does not excuse skipping `shadcn` or `be
 1. **Never touch the Next.js / shadcn / Better Auth / MCP layers without reading their corresponding skill** for this repo. They are mandatory references, not optional browsing.
 2. **Before claiming work is done, fixed, or passing**, run the project’s verification commands (see workspace rules: lint and typecheck scripts) and only assert success when the output supports it.
 
+## Git and Vercel deploy workflow
+
+- Vercel production deploys from `main`.
+- Pushing only to `master` creates a Vercel Preview deployment, not Production.
+- For changes to show on the live site, make sure the final commits land on `main` and are pushed to `origin/main`.
+- If work is done on `master`, push it and merge/open the PR into `main`; do not treat the `master` preview deploy as the finished production deploy.
+- Before saying production is updated, verify Vercel shows a successful Production deployment from `main` at the expected commit.
+
 ## If no skill matches
 
 Fall back to sound engineering judgment. State explicitly: _"I checked the skills list and none applied because …"_ so the user can correct a missed skill.
