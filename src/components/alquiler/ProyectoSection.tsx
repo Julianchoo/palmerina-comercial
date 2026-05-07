@@ -7,6 +7,7 @@ const slides = [
   { src: "/images/Generica-metal-noche1.png", alt: "Locales comerciales de noche", caption: "Locales comerciales" },
   { src: "/images/generica-metal-dia1.png", alt: "Locales comerciales de día", caption: "Paseo comercial" },
   { src: "/images/generica-metal-dia2.png", alt: "Vista exterior del paseo comercial", caption: "Diseño open-air" },
+  { src: "/images/padel-noche.png", alt: "Cancha de pádel de noche", caption: "Pádel nocturno" },
   { src: "/images/sports.png", alt: "Local deportivo", caption: "Local deportivo y fitness" },
   { src: "/images/cocina.png", alt: "Hogar y deco", caption: "Hogar y deco" },
   { src: "/images/restaurant.png", alt: "Restaurante", caption: "Restaurante y gastronomía" },
