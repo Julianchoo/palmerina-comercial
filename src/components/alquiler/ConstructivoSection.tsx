@@ -5,8 +5,8 @@ import { SectionBadge } from "@/components/shared/SectionBadge";
 const items = [
   {
     icon: "🏗️",
-    title: "Estructura de hormigón",
-    desc: "Construcción en seco con estructura de hormigón armado y cubierta metálica. Resistencia y durabilidad garantizadas.",
+    title: "Estructura metálica",
+    desc: "Sistema constructivo con estructura metálica, cubierta liviana y cerramientos de vidrio para lograr locales amplios, luminosos y de rápida ejecución.",
   },
   {
     icon: "💡",
@@ -57,9 +57,9 @@ export function ConstructivoSection() {
           </FadeInSection>
 
           <FadeInSection delay="100ms">
-            <div className="relative w-full h-72 md:h-80 rounded-2xl overflow-hidden shadow-card-lg">
+            <div className="relative w-full aspect-[3/2] rounded-2xl overflow-hidden shadow-card-lg">
               <Image
-                src="/images/Gym.png"
+                src="/images/galery-metal.png"
                 alt="Detalle constructivo del paseo comercial"
                 fill
                 className="object-cover"

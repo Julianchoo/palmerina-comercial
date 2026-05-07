@@ -41,7 +41,7 @@ export default function AlquilerPage() {
       <Navbar navLinks={navLinks} />
 
       <HeroSection
-        backgroundImage="/images/zoomout2.png"
+        backgroundImage="/images/zoomout3.png"
         badge="Paseo Comercial · Canning, Buenos Aires"
         title={
           <>

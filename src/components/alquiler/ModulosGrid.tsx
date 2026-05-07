@@ -6,7 +6,7 @@ import { SectionBadge } from "@/components/shared/SectionBadge";
 const modulos = [
   {
     size: "200m²",
-    image: "/images/Muebles.png",
+    image: "/images/modulo-chico-metal-tarde.png",
     alt: "Local de muebles y decoración – módulo 200m²",
     desc: "Ideal para locales de retail, servicios, gastronomía y comercios especializados.",
     usos: ["Retail", "Gastronomía", "Servicios", "Salud"],
@@ -14,7 +14,7 @@ const modulos = [
   },
   {
     size: "400m²",
-    image: "/images/Resto.png",
+    image: "/images/Modulo-mediauno-metal-noche.png",
     alt: "Restaurante – módulo 400m²",
     desc: "El formato más versátil del paseo. Perfecto para cadenas, supermercados y locales âncoras.",
     usos: ["Cadenas", "Supermercado", "Ancora", "Gym"],
@@ -22,7 +22,7 @@ const modulos = [
   },
   {
     size: "600m²",
-    image: "/images/Gym.png",
+    image: "/images/Modulo-grande-metal-noche.png",
     alt: "Gimnasio y centro deportivo – módulo 600m²",
     desc: "Para grandes operadores que necesitan escala y visibilidad máxima desde la ruta.",
     usos: ["Logística", "Gran retail", "Educación", "Entretenimiento"],

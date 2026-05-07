@@ -3,9 +3,9 @@ import { SectionBadge } from "@/components/shared/SectionBadge";
 import { EmblaCarousel } from "./EmblaCarousel";
 
 const slides = [
-  { src: "/images/zoomout.png", alt: "Vista aérea del paseo comercial", caption: "Paseo Comercial La Palmerina" },
+  { src: "/images/zoomout3.png", alt: "Vista aérea del paseo comercial", caption: "Paseo Comercial La Palmerina" },
   { src: "/images/sports.png", alt: "Local deportivo", caption: "Local deportivo y fitness" },
-  { src: "/images/cocina.png", alt: "Local gastronómico", caption: "Local gastronómico" },
+  { src: "/images/cocina.png", alt: "Hogar y deco", caption: "Hogar y deco" },
   { src: "/images/restaurant.png", alt: "Restaurante", caption: "Restaurante y gastronomía" },
 ];
 

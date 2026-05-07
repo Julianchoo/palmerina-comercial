@@ -75,7 +75,7 @@ export function SpecsSection() {
           <FadeInSection delay="100ms">
             <div className="relative w-full h-80 md:h-[420px] rounded-2xl overflow-hidden shadow-card-lg sticky top-24">
               <Image
-                src="/images/zoomout.png"
+                src="/images/zoomout3.png"
                 alt="Vista aérea del terreno La Palmerina – Canning"
                 fill
                 className="object-cover"
