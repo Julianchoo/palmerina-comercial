@@ -1,8 +1,9 @@
 "use client";
 
-import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import useEmblaCarousel from "embla-carousel-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Slide {
   src: string;
@@ -16,29 +17,42 @@ export function EmblaCarousel({ slides }: { slides: Slide[] }) {
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback((index: number) => emblaApi?.scrollTo(index), [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
-    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+
     emblaApi.on("select", onSelect);
-    return () => { emblaApi.off("select", onSelect); };
-  }, [emblaApi]);
+    emblaApi.on("reInit", onSelect);
+
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi, onSelect]);
 
   return (
     <div className="relative">
-      <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
+      <div className="overflow-hidden rounded-[1.75rem] bg-brand-dark shadow-2xl shadow-brand-dark/20" ref={emblaRef}>
         <div className="flex">
-          {slides.map((slide, i) => (
-            <div key={i} className="flex-[0_0_100%] min-w-0">
-              <div className="relative w-full h-64 md:h-80">
+          {slides.map((slide, index) => (
+            <div key={slide.src} className="min-w-0 flex-[0_0_100%]">
+              <div className="relative h-[360px] w-full overflow-hidden md:h-[520px] lg:h-[580px]">
                 <Image
                   src={slide.src}
                   alt={slide.alt}
                   fill
+                  priority={index === 0}
+                  sizes="(min-width: 1280px) 1200px, (min-width: 768px) 92vw, 100vw"
                   className="object-cover"
                 />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                  <p className="text-white text-sm font-medium">{slide.caption}</p>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/35 to-transparent px-5 pb-5 pt-20 md:px-8 md:pb-7">
+                  <p className="text-sm font-semibold text-white md:text-base">{slide.caption}</p>
                 </div>
               </div>
             </div>
@@ -47,30 +61,44 @@ export function EmblaCarousel({ slides }: { slides: Slide[] }) {
       </div>
 
       <button
+        type="button"
         onClick={scrollPrev}
-        className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center hover:bg-white/30 transition-colors"
+        className="absolute left-3 top-[180px] flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/45 bg-white/20 text-white shadow-lg backdrop-blur-md transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white md:left-5 md:top-[260px] lg:top-[290px]"
         aria-label="Anterior"
       >
-        ‹
+        <ChevronLeft className="size-5" aria-hidden="true" />
       </button>
       <button
+        type="button"
         onClick={scrollNext}
-        className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center hover:bg-white/30 transition-colors"
+        className="absolute right-3 top-[180px] flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/45 bg-white/20 text-white shadow-lg backdrop-blur-md transition-colors hover:bg-white/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white md:right-5 md:top-[260px] lg:top-[290px]"
         aria-label="Siguiente"
       >
-        ›
+        <ChevronRight className="size-5" aria-hidden="true" />
       </button>
 
-      <div className="flex justify-center gap-2 mt-4">
-        {slides.map((_, i) => (
+      <div className="mt-4 flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] md:mt-5 md:justify-center md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden">
+        {slides.map((slide, index) => (
           <button
-            key={i}
-            onClick={() => emblaApi?.scrollTo(i)}
-            className={`w-2 h-2 rounded-full transition-all duration-200 ${
-              i === selectedIndex ? "bg-brand-accent w-5" : "bg-gray-300"
+            type="button"
+            key={slide.src}
+            onClick={() => scrollTo(index)}
+            className={`relative h-14 w-20 flex-none overflow-hidden rounded-xl border transition-all duration-200 md:h-16 md:w-24 ${
+              index === selectedIndex
+                ? "border-brand-accent ring-2 ring-brand-accent/35"
+                : "border-transparent opacity-65 hover:opacity-100"
             }`}
-            aria-label={`Slide ${i + 1}`}
-          />
+            aria-label={`Ver ${slide.caption}`}
+            aria-current={index === selectedIndex ? "true" : undefined}
+          >
+            <Image
+              src={slide.src}
+              alt=""
+              fill
+              sizes="96px"
+              className="object-cover"
+            />
+          </button>
         ))}
       </div>
     </div>

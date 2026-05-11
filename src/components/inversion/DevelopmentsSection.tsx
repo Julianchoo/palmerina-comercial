@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { FadeInSection } from "@/components/shared/FadeInSection";
 import { SectionBadge } from "@/components/shared/SectionBadge";
 
@@ -85,16 +84,6 @@ export function DevelopmentsSection() {
           ))}
         </div>
 
-        <FadeInSection>
-          <div className="relative w-full h-64 md:h-80 rounded-2xl overflow-hidden shadow-card-lg">
-            <Image
-              src="/images/desarrollo-opciones.png"
-              alt="Opciones de desarrollo comercial en La Palmerina"
-              fill
-              className="object-cover"
-            />
-          </div>
-        </FadeInSection>
       </div>
     </section>
   );
