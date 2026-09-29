@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plano La Palmerina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f4ef; --surface:#ffffff; --surface-2:#f1ede4; --ink:#16213e; --ink-2:#4b5563; --muted:#8a8f98;
+  --line:#e2ddd2; --primary:#1a5f7a; --primary-2:#2d8caa; --deep:#0f3d4f; --gold:#d4a574; --gold-2:#b8915f;
+  --plot:#fbfaf6; --green:#dfe8d6; --green-2:#c9d9ba; --road:#6f7470; --road-2:#8a8f8a; --walk:#e6d6b3; --park:#e4e2dc; --stall:#b4b2aa;
+  --st-disp:#2f9e6e; --st-res:#e0a526; --st-vend:#c2544a; --st-alq:#5a6fd6;
+  --t-kiosco:#d4a574; --t-pad:#b8915f; --t-200:#7fb8cc; --t-400:#2d8caa; --t-600:#1a5f7a; --t-ancla:#0f3d4f;
+  --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 16px rgba(16,24,40,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#10141f; --surface:#171d2b; --surface-2:#1e2536; --ink:#eef1f6; --ink-2:#b6bdca; --muted:#7f8797;
+    --line:#2a3246; --plot:#1a2130; --green:#233327; --green-2:#2c4131; --road:#3c4250; --road-2:#4a5160; --walk:#4a4232; --park:#222a38; --stall:#3a4254;
+    --t-200:#8cc6da; --t-400:#3ba3c4; --t-600:#2a7f9e; --t-ancla:#6fa3b8;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10141f; --surface:#171d2b; --surface-2:#1e2536; --ink:#eef1f6; --ink-2:#b6bdca; --muted:#7f8797;
+  --line:#2a3246; --plot:#1a2130; --green:#233327; --green-2:#2c4131; --road:#3c4250; --road-2:#4a5160; --walk:#4a4232; --park:#222a38; --stall:#3a4254;
+  --t-200:#8cc6da; --t-400:#3ba3c4; --t-600:#2a7f9e; --t-ancla:#6fa3b8;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1440px;margin:0 auto;padding:20px 16px 48px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:16px}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);font-weight:600}
+h1{margin:2px 0 0;font-size:26px;letter-spacing:-.01em}
+.sub{color:var(--ink-2);margin-top:2px}
+.theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer;font:inherit;font-size:12px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+.kpi .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.kpi .v{font-size:19px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:11px;color:var(--ink-2)}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:10px}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--ink-2);font:inherit;font-size:12.5px;padding:6px 10px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--primary);color:#fff}
+.tb-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-right:6px}
+.chips{display:inline-flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:4px 10px;font:inherit;font-size:12px;cursor:pointer}
+.chip[aria-pressed="false"]{opacity:.45}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.plan-card{padding:10px}
+.plan-scroll{overflow-x:auto}
+.plan-card svg{display:block;width:100%;height:auto;user-select:none}
+@media (max-width:700px){.plan-card svg{width:680px}}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;padding:8px 6px 2px;font-size:12px;color:var(--ink-2);align-items:center}
+.legend .sw{width:12px;height:12px;border-radius:3px;display:inline-block;vertical-align:-2px;margin-right:5px}
+.legend .grad{width:120px;height:10px;border-radius:5px;display:inline-block;vertical-align:-1px;margin:0 6px}
+/* plan elements */
+.unit{cursor:pointer;transition:opacity .15s}
+.unit rect.body{stroke:var(--surface);stroke-width:.35;transition:fill .25s}
+.unit:hover rect.body{filter:brightness(1.08)}
+.unit:focus{outline:none}
+.unit:focus-visible rect.body,.unit.sel rect.body{stroke:var(--gold);stroke-width:1}
+.unit.dim{opacity:.18}
+.unit text{pointer-events:none;font-family:Inter,sans-serif;text-anchor:middle;dominant-baseline:middle}
+.unit .uid{font-weight:700;font-size:2.6px}
+.unit .um2{font-size:1.9px;opacity:.9}
+.lbl{font-family:Inter,sans-serif;fill:var(--ink-2);text-anchor:middle;dominant-baseline:middle}
+.lbl-w{font-family:Inter,sans-serif;fill:#fff;text-anchor:middle;dominant-baseline:middle;font-weight:600;letter-spacing:.1px}
+/* side panel */
+.panel{padding:16px;position:sticky;top:12px}
+.panel .empty{color:var(--ink-2);padding:30px 6px;text-align:center}
+.panel .empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+.p-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.p-id{font-size:24px;font-weight:700;letter-spacing:-.01em}
+.p-rubro{color:var(--ink-2);font-size:13px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:999px;white-space:nowrap}
+.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.p-cell{background:var(--surface-2);border-radius:10px;padding:9px 10px}
+.p-cell .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.p-cell .v{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+.p-cell .s{font-size:11px;color:var(--ink-2)}
+.p-cell.hl{background:color-mix(in srgb,var(--primary) 12%,var(--surface))}
+.p-sec{margin-top:14px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+dl.facts{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;margin:6px 0 0;font-size:13px}
+dl.facts dt{color:var(--ink-2)}
+dl.facts dd{margin:0;text-align:right;font-weight:500;font-variant-numeric:tabular-nums}
+.bar{height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;background:var(--gold)}
+.p-actions{display:flex;gap:8px;margin-top:14px}
+.btn{flex:1;text-align:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9px;padding:8px;font:inherit;font-size:12.5px;cursor:pointer;text-decoration:none}
+.btn.pri{background:var(--primary);border-color:var(--primary);color:#fff}
+/* tooltip */
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;padding:7px 9px;border-radius:8px;box-shadow:var(--shadow);opacity:0;transition:opacity .1s;z-index:10;white-space:nowrap}
+.tip b{font-size:13px}
+/* table */
+.tbl-card{margin-top:14px;overflow:hidden}
+.tbl-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap}
+.tbl-head h2{margin:0;font-size:15px}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child,th:nth-child(2),td:nth-child(2),th:nth-child(3),td:nth-child(3){text-align:left}
+th{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;cursor:pointer;background:var(--surface);position:sticky;top:0}
+th.sorted{color:var(--primary)}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--surface-2)}
+tbody tr.sel{background:color-mix(in srgb,var(--gold) 18%,var(--surface))}
+tbody tr.dim{opacity:.35}
+tfoot td{font-weight:700;border-bottom:0}
+.note{font-size:11.5px;color:var(--muted);margin-top:12px}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.main{grid-template-columns:minmax(0,1fr)}.panel{position:static}}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}h1{font-size:21px}.kpi .v{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Paseo Comercial · Canning · RP58</div>
+      <h1>La Palmerina — Plano comercial interactivo</h1>
+      <div class="sub">Parcela 100 × 180 m · 19 unidades funcionales · Tocá una unidad para ver su ficha</div>
+    </div>
+    <button class="theme-btn" id="themeBtn" type="button">◐ Tema</button>
+  </header>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="toolbar">
+    <div><span class="tb-label">Colorear por</span>
+      <div class="seg" id="modeSeg" role="group" aria-label="Colorear por">
+        <button type="button" data-mode="tipo" aria-pressed="true">Tipología</button>
+        <button type="button" data-mode="estado" aria-pressed="false">Estado</button>
+        <button type="button" data-mode="venta" aria-pressed="false">USD/m² venta</button>
+        <button type="button" data-mode="yield" aria-pressed="false">Rentabilidad</button>
+      </div>
+    </div>
+    <div><span class="tb-label">Mostrar</span><span class="chips" id="stateChips"></span></div>
+  </div>
+
+  <div class="main">
+    <div class="card plan-card">
+      <div class="plan-scroll"><svg id="plan" viewBox="-16 -6 202 112" role="img" aria-label="Plano de implantación de La Palmerina"></svg></div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <aside class="card panel" id="panel" aria-live="polite"></aside>
+  </div>
+
+  <div class="card tbl-card">
+    <div class="tbl-head"><h2>Listado de unidades</h2><span class="note" style="margin:0">Click en el encabezado para ordenar</span></div>
+    <div class="tbl-scroll"><table id="tbl"></table></div>
+  </div>
+
+  <p class="note">Anteproyecto conceptual con datos ilustrativos (distribución, superficies, precios, estados y rentas inventados a modo de ejemplo). No constituye oferta comercial. Valores en USD, sin IVA. Rentabilidad bruta = alquiler anual ÷ precio de venta.</p>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+/* ---------- Datos (ilustrativos) ----------
+   Coordenadas en metros. X = profundidad desde la ruta (0–180), Y = ancho de parcela (0–100).
+   m2 = superficie cubierta propia; exp = expansión semicubierta / deck. */
+const TYPES = {
+  kiosco:{label:"Kiosco gastronómico", color:"var(--t-kiosco)"},
+  pad:{label:"Pad frente a ruta", color:"var(--t-pad)"},
+  "200":{label:"Local 200 m²", color:"var(--t-200)"},
+  "400":{label:"Local 400 m²", color:"var(--t-400)"},
+  "600":{label:"Local 600 m²", color:"var(--t-600)"},
+  ancla:{label:"Local ancla", color:"var(--t-ancla)"}
+};
+const STATES = {
+  disp:{label:"Disponible", color:"var(--st-disp)"},
+  res:{label:"Reservado", color:"var(--st-res)"},
+  vend:{label:"Vendido", color:"var(--st-vend)"},
+  alq:{label:"Alquilado", color:"var(--st-alq)"}
+};
+const U = [
+  // Frente / plaza de acceso
+  {id:"P-01",tipo:"pad",x:3,y:4,w:10,h:16,exp:64,vta:3100,alq:26,estado:"res",rubro:"Café / drive-thru",vis:"Frente a ruta · esquina",etapa:1,coch:6},
+  {id:"P-02",tipo:"pad",x:3,y:80,w:10,h:16,exp:64,vta:3100,alq:26,estado:"disp",rubro:"Heladería / fast food",vis:"Frente a ruta · esquina",etapa:1,coch:6},
+  {id:"K-01",tipo:"kiosco",x:5,y:29,w:6,h:6,exp:24,vta:3400,alq:30,estado:"alq",rubro:"Café al paso",vis:"Plaza de acceso",etapa:1,coch:0},
+  {id:"K-02",tipo:"kiosco",x:5,y:65,w:6,h:6,exp:24,vta:3400,alq:30,estado:"disp",rubro:"Heladería / jugos",vis:"Plaza de acceso",etapa:1,coch:0},
+  // Tira norte (Y 2–18)
+  {id:"L-01",tipo:"200",x:20,y:2,w:12.5,h:16,exp:30,vta:2500,alq:20,estado:"vend",rubro:"Farmacia",vis:"Cabecera · alta rotación",etapa:1,coch:4},
+  {id:"L-02",tipo:"200",x:32.5,y:2,w:12.5,h:16,exp:30,vta:2450,alq:19.5,estado:"alq",rubro:"Óptica / indumentaria",vis:"Frente a estacionamiento",etapa:1,coch:4},
+  {id:"L-03",tipo:"200",x:45,y:2,w:12.5,h:16,exp:30,vta:2400,alq:19,estado:"disp",rubro:"Pet shop / veterinaria",vis:"Frente a estacionamiento",etapa:1,coch:4},
+  {id:"L-04",tipo:"400",x:57.5,y:2,w:25,h:16,exp:60,vta:2300,alq:18,estado:"res",rubro:"Restaurante",vis:"Frente a cruce central",etapa:1,coch:8},
+  {id:"L-05",tipo:"200",x:82.5,y:2,w:12.5,h:16,exp:30,vta:2300,alq:18,estado:"disp",rubro:"Servicios / banco",vis:"Frente a estacionamiento",etapa:2,coch:4},
+  {id:"L-06",tipo:"600",x:95,y:2,w:37.5,h:16,exp:90,vta:2100,alq:16,estado:"disp",rubro:"Muebles y deco",vis:"Frente a paseo peatonal",etapa:2,coch:12},
+  // Tira sur (Y 82–98)
+  {id:"L-07",tipo:"400",x:20,y:82,w:25,h:16,exp:60,vta:2450,alq:19,estado:"vend",rubro:"Cervecería / bodegón",vis:"Cabecera · alta rotación",etapa:1,coch:8},
+  {id:"L-08",tipo:"200",x:45,y:82,w:12.5,h:16,exp:30,vta:2400,alq:19,estado:"alq",rubro:"Heladería artesanal",vis:"Frente a estacionamiento",etapa:1,coch:4},
+  {id:"L-09",tipo:"200",x:57.5,y:82,w:12.5,h:16,exp:30,vta:2350,alq:18.5,estado:"disp",rubro:"Estética / peluquería",vis:"Frente a cruce central",etapa:1,coch:4},
+  {id:"L-10",tipo:"200",x:70,y:82,w:12.5,h:16,exp:30,vta:2350,alq:18.5,estado:"res",rubro:"Consultorios",vis:"Frente a cruce central",etapa:1,coch:4},
+  {id:"L-11",tipo:"200",x:82.5,y:82,w:12.5,h:16,exp:30,vta:2300,alq:18,estado:"disp",rubro:"Librería / jugueteria",vis:"Frente a estacionamiento",etapa:2,coch:4},
+  {id:"L-12",tipo:"600",x:95,y:82,w:37.5,h:16,exp:90,vta:2100,alq:16,estado:"disp",rubro:"Pádel indoor / kids",vis:"Frente a paseo peatonal",etapa:2,coch:12},
+  // Anclas (fondo)
+  {id:"A-01",tipo:"ancla",x:144,y:2,w:32,h:45,exp:0,vta:1650,alq:11,estado:"res",rubro:"Supermercado",vis:"Remate de avenida central",etapa:2,coch:40},
+  {id:"A-02",tipo:"ancla",x:144,y:53,w:32,h:25,exp:0,vta:1800,alq:12,estado:"disp",rubro:"Gimnasio / fitness",vis:"Frente a paseo peatonal",etapa:2,coch:20},
+  {id:"A-03",tipo:"ancla",x:144,y:78,w:32,h:20,exp:0,vta:1900,alq:12.5,estado:"disp",rubro:"Centro médico",vis:"Frente a paseo peatonal",etapa:2,coch:16}
+];
+const EXPENSAS_M2 = 2.2;      // USD/m²/mes
+const ALTURA = {kiosco:3.2,pad:4.5,"200":6,"400":6,"600":6,ancla:7.5};
+U.forEach(u=>{
+  u.frente = Math.min(u.w,u.h); u.fondo = Math.max(u.w,u.h);
+  if(u.tipo==="kiosco"){u.frente=u.w;u.fondo=u.h;}
+  u.m2 = +(u.w*u.h).toFixed(1);
+  u.ventaUSD = Math.round(u.m2*u.vta/1000)*1000;
+  u.alqUSD = Math.round(u.m2*u.alq/10)*10;
+  u.yield = u.alqUSD*12/u.ventaUSD;
+  u.expensas = Math.round(u.m2*EXPENSAS_M2/10)*10;
+  u.recupero = u.ventaUSD/(u.alqUSD*12);
+  u.altura = ALTURA[u.tipo];
+});
+const GLA = U.reduce((s,u)=>s+u.m2,0);
+
+/* ---------- Helpers ---------- */
+const fmt = n=>n.toLocaleString("es-AR",{maximumFractionDigits:0});
+const usd = n=>"USD "+fmt(n);
+const usdK = n=>n>=1e6?"USD "+(n/1e6).toLocaleString("es-AR",{maximumFractionDigits:2})+" M":"USD "+fmt(Math.round(n/1000))+" k";
+const pct = n=>(n*100).toLocaleString("es-AR",{minimumFractionDigits:1,maximumFractionDigits:1})+"%";
+const $ = s=>document.querySelector(s);
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs={},parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v.replace(/var\((.*)\)/,"$1")).trim();}
+function lerpColor(a,b,t){const pa=a.match(/\w\w/g).map(h=>parseInt(h,16)),pb=b.match(/\w\w/g).map(h=>parseInt(h,16));return"#"+pa.map((v,i)=>Math.round(v+(pb[i]-v)*t).toString(16).padStart(2,"0")).join("");}
+function textOn(hex){if(!hex.startsWith("#"))return"#fff";const [r,g,b]=hex.slice(1).match(/\w\w/g).map(h=>parseInt(h,16));return (r*299+g*587+b*114)/1000>150?"#16213e":"#ffffff";}
+
+/* ---------- Estado de la UI ---------- */
+let mode="tipo", selected=null, visibleStates=new Set(Object.keys(STATES)), sortKey="id", sortDir=1;
+
+/* ---------- Plano ---------- */
+const svg=$("#plan");
+function drawSite(){
+  const g=el("g",{},svg);
+  // ruta
+  el("rect",{x:-15,y:-5,width:9,height:110,fill:"var(--road)",rx:1},g);
+  el("path",{d:"M -10.5 -5 V 105",stroke:"#f5d46e","stroke-width":.3,"stroke-dasharray":"4 3"},g);
+  el("text",{x:-8,y:50,class:"lbl-w","font-size":2.6,transform:"rotate(-90 -8 50)"},g).textContent="RUTA PROVINCIAL 58 · FRENTE PRINCIPAL";
+  // parcela
+  el("rect",{x:0,y:0,width:180,height:100,fill:"var(--plot)",stroke:"var(--ink-2)","stroke-width":.35},g);
+  // plaza de acceso
+  el("rect",{x:0,y:0,width:16,height:100,fill:"var(--green)"},g);
+  for(const y of [23,77]) el("text",{x:8,y,class:"lbl","font-size":1.5},g).textContent="PLAZA";
+  el("rect",{x:14,y:41,width:1.2,height:3,fill:"var(--gold-2)"},g); // tótem
+  // accesos
+  el("rect",{x:-6,y:45,width:6,height:10,fill:"var(--road)"},g);
+  // avenida central
+  el("rect",{x:0,y:45,width:142,height:10,fill:"var(--road)"},g);
+  el("path",{d:"M 0 50 H 136",stroke:"#f3efe4","stroke-width":.25,"stroke-dasharray":"2 2"},g);
+  el("text",{x:104,y:47.6,class:"lbl-w","font-size":2},g).textContent="AVENIDA CENTRAL · 10 m";
+  // circulaciones laterales
+  el("rect",{x:16,y:20,width:120,height:8,fill:"var(--road-2)"},g);
+  el("rect",{x:16,y:72,width:120,height:8,fill:"var(--road-2)"},g);
+  el("rect",{x:16,y:28,width:4,height:44,fill:"var(--road-2)"},g);
+  el("rect",{x:132.5,y:28,width:3.5,height:44,fill:"var(--road-2)"},g);
+  el("rect",{x:76,y:28,width:6,height:17,fill:"var(--road-2)"},g);
+  el("rect",{x:76,y:55,width:6,height:17,fill:"var(--road-2)"},g);
+  // galerías cubiertas
+  el("rect",{x:20,y:18,width:112.5,height:2,fill:"var(--walk)"},g);
+  el("rect",{x:20,y:80,width:112.5,height:2,fill:"var(--walk)"},g);
+  // estacionamiento
+  let plazas=0;
+  const rows=[[28,33],[40,45],[55,60],[67,72]];
+  for(const [y0,y1] of rows){
+    el("rect",{x:20,y:y0,width:112.5,height:y1-y0,fill:"var(--park)"},g);
+    for(let x=20;x+2.5<=132.5;x+=2.5){
+      if(x>=76-0.01&&x<82)continue;
+      el("rect",{x,y:y0,width:2.5,height:y1-y0,fill:"none",stroke:"var(--stall)","stroke-width":.15},g);
+      plazas++;
+    }
+  }
+  for(const y of [33,60]) el("rect",{x:20,y,width:112.5,height:7,fill:"var(--park)",opacity:.6},g);
+  el("text",{x:48,y:36.6,class:"lbl","font-size":1.7},g).textContent="ESTACIONAMIENTO";
+  el("text",{x:48,y:63.6,class:"lbl","font-size":1.7},g).textContent="ESTACIONAMIENTO";
+  // PMR
+  for(const [x,y] of [[20,40],[20,55],[127.5,40],[127.5,55]]){
+    el("rect",{x,y,width:2.5,height:5,fill:"color-mix(in srgb,var(--primary-2) 30%,var(--park))",stroke:"var(--primary-2)","stroke-width":.15},g);
+  }
+  // paseo peatonal y servicio
+  el("rect",{x:136,y:0,width:8,height:100,fill:"var(--walk)"},g);
+  el("text",{x:140,y:26,class:"lbl","font-size":1.8,transform:"rotate(-90 140 26)"},g).textContent="PASEO PEATONAL · 8 m";
+  el("text",{x:140,y:76,class:"lbl","font-size":1.8,transform:"rotate(-90 140 76)"},g).textContent="PATIO GASTRONÓMICO";
+  el("rect",{x:144,y:47,width:32,height:6,fill:"var(--road-2)"},g);
+  el("text",{x:160,y:50.1,class:"lbl-w","font-size":1.7},g).textContent="CALLE DE SERVICIO / CARGA";
+  el("rect",{x:176,y:0,width:4,height:100,fill:"var(--green)"},g);
+  // escala y norte
+  el("path",{d:"M 150 104 H 170",stroke:"var(--ink-2)","stroke-width":.35},g);
+  el("path",{d:"M 150 103 V 105 M 160 103.4 V 104.6 M 170 103 V 105",stroke:"var(--ink-2)","stroke-width":.3},g);
+  el("text",{x:160,y:102.2,class:"lbl","font-size":1.6},g).textContent="20 m";
+  el("text",{x:90,y:-2.8,class:"lbl","font-size":1.8},g).textContent="PARCELA 100 × 180 m · 18.000 m²";
+  return plazas;
+}
+const PLAZAS = drawSite();
+const unitLayer=el("g",{},svg);
+const unitEls={};
+U.forEach(u=>{
+  const g=el("g",{class:"unit",tabindex:0,role:"button","aria-label":`${u.id}, ${u.m2} m², ${STATES[u.estado].label}`},unitLayer);
+  el("rect",{class:"body",x:u.x,y:u.y,width:u.w,height:u.h,rx:.4},g);
+  const cx=u.x+u.w/2, cy=u.y+u.h/2, small=u.w<8;
+  const t1=el("text",{class:"uid",x:cx,y:small?cy:cy-1.5,"font-size":small?1.9:2.6},g); t1.textContent=u.id;
+  if(!small){const t2=el("text",{class:"um2",x:cx,y:cy+1.8},g); t2.textContent=fmt(u.m2)+" m²";}
+  g.addEventListener("click",()=>select(u.id));
+  g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();select(u.id);}});
+  g.addEventListener("mousemove",e=>showTip(e,u));
+  g.addEventListener("mouseleave",hideTip);
+  unitEls[u.id]=g;
+});
+
+/* ---------- Color ---------- */
+const vRange=[Math.min(...U.map(u=>u.vta)),Math.max(...U.map(u=>u.vta))];
+const yRange=[Math.min(...U.map(u=>u.yield)),Math.max(...U.map(u=>u.yield))];
+function colorFor(u){
+  if(mode==="tipo") return css(TYPES[u.tipo].color);
+  if(mode==="estado") return css(STATES[u.estado].color);
+  const [a,b]=mode==="venta"?vRange:yRange, v=mode==="venta"?u.vta:u.yield;
+  return lerpColor("#dcecf2","#0f3d4f",(v-a)/(b-a||1));
+}
+function paint(){
+  U.forEach(u=>{
+    const g=unitEls[u.id], c=colorFor(u);
+    g.querySelector("rect.body").setAttribute("fill",c);
+    g.querySelectorAll("text").forEach(t=>t.setAttribute("fill",textOn(c)));
+    g.classList.toggle("dim",!visibleStates.has(u.estado));
+    g.classList.toggle("sel",u.id===selected);
+  });
+  renderLegend(); renderTable();
+}
+function renderLegend(){
+  const L=$("#legend");
+  if(mode==="tipo"||mode==="estado"){
+    const src=mode==="tipo"?TYPES:STATES;
+    L.innerHTML=Object.entries(src).map(([k,v])=>`<span><span class="sw" style="background:${v.color}"></span>${v.label}</span>`).join("")
+      +`<span style="margin-left:auto"><span class="sw" style="background:var(--park);border:1px solid var(--stall)"></span>${PLAZAS+4} cocheras (4 PMR)</span>`;
+  }else{
+    const [a,b]=mode==="venta"?vRange:yRange, f=mode==="venta"?(v=>usd(v)+"/m²"):pct;
+    L.innerHTML=`<span>${f(a)}<span class="grad" style="background:linear-gradient(90deg,#dcecf2,#0f3d4f)"></span>${f(b)}</span>`;
+  }
+}
+
+/* ---------- Tooltip ---------- */
+const tip=$("#tip");
+function showTip(e,u){
+  tip.innerHTML=`<b>${u.id}</b> · ${u.rubro}<br>${fmt(u.m2)} m² · ${usdK(u.ventaUSD)} · ${usd(u.alqUSD)}/mes`;
+  const pad=14, r=tip.getBoundingClientRect();
+  let x=e.clientX+pad, y=e.clientY+pad;
+  if(x+r.width>innerWidth-8)x=e.clientX-r.width-pad;
+  if(y+r.height>innerHeight-8)y=e.clientY-r.height-pad;
+  tip.style.left=x+"px"; tip.style.top=y+"px"; tip.style.opacity=1;
+}
+function hideTip(){tip.style.opacity=0;}
+
+/* ---------- Panel de detalle ---------- */
+function select(id){selected=selected===id?null:id;paint();renderPanel();
+  if(selected&&innerWidth<=1100)$("#panel").scrollIntoView({behavior:"smooth",block:"start"});}
+function renderPanel(){
+  const P=$("#panel"), u=U.find(x=>x.id===selected);
+  if(!u){
+    const byType=Object.keys(TYPES).map(t=>{const us=U.filter(x=>x.tipo===t);return{t,n:us.length,m2:us.reduce((s,x)=>s+x.m2,0)};});
+    P.innerHTML=`<div class="empty"><b>Seleccioná una unidad</b>Hacé click sobre un local del plano o de la tabla para ver su ficha comercial.</div>
+      <div class="p-sec">Mix por tipología (% de superficie)</div>
+      ${byType.map(o=>`<div style="margin-top:8px;font-size:12.5px;display:flex;justify-content:space-between"><span><span class="dot" style="background:${TYPES[o.t].color};margin-right:6px"></span>${TYPES[o.t].label} <span style="color:var(--muted)">× ${o.n}</span></span><b>${fmt(o.m2)} m²</b></div>
+      <div class="bar"><i style="width:${(o.m2/GLA*100).toFixed(1)}%;background:${TYPES[o.t].color}"></i></div>`).join("")}`;
+    return;
+  }
+  const st=STATES[u.estado], stc=css(st.color);
+  const ppmAvg=U.reduce((s,x)=>s+x.ventaUSD,0)/GLA;
+  const diff=(u.vta/ppmAvg-1);
+  P.innerHTML=`
+    <div class="p-head">
+      <div><div class="p-id">${u.id}</div><div class="p-rubro">${TYPES[u.tipo].label} · Rubro sugerido: ${u.rubro}</div></div>
+      <span class="badge" style="background:color-mix(in srgb,${stc} 16%,transparent);color:${stc}"><span class="dot" style="background:${stc}"></span>${st.label}</span>
+    </div>
+    <div class="p-grid">
+      <div class="p-cell"><div class="l">Superficie</div><div class="v">${fmt(u.m2)} m²</div><div class="s">${u.exp?`+ ${u.exp} m² expansión`:"sin expansión"}</div></div>
+      <div class="p-cell"><div class="l">Frente × fondo</div><div class="v">${u.frente.toLocaleString("es-AR")} × ${u.fondo.toLocaleString("es-AR")} m</div><div class="s">Altura libre ${u.altura.toLocaleString("es-AR")} m</div></div>
+      <div class="p-cell hl"><div class="l">Precio venta</div><div class="v">${usd(u.ventaUSD)}</div><div class="s">${usd(u.vta)} / m²</div></div>
+      <div class="p-cell hl"><div class="l">Alquiler mensual</div><div class="v">${usd(u.alqUSD)}</div><div class="s">${u.alq.toLocaleString("es-AR")} USD / m² / mes</div></div>
+      <div class="p-cell"><div class="l">Rentabilidad bruta</div><div class="v">${pct(u.yield)}</div><div class="s">Recupero ${u.recupero.toLocaleString("es-AR",{maximumFractionDigits:1})} años</div></div>
+      <div class="p-cell"><div class="l">Expensas est.</div><div class="v">${usd(u.expensas)}</div><div class="s">${EXPENSAS_M2.toLocaleString("es-AR")} USD / m² / mes</div></div>
+    </div>
+    <div class="p-sec">Ficha</div>
+    <dl class="facts">
+      <dt>Ubicación</dt><dd>${u.vis}</dd>
+      <dt>Cocheras asignadas</dt><dd>${u.coch||"—"}</dd>
+      <dt>Etapa de entrega</dt><dd>Etapa ${u.etapa} · ${u.etapa===1?"2º sem. 2027":"1º sem. 2028"}</dd>
+      <dt>Incidencia sobre GLA</dt><dd>${pct(u.m2/GLA)}</dd>
+      <dt>USD/m² vs. promedio</dt><dd>${diff>=0?"+":""}${pct(diff)}</dd>
+      <dt>Servicios</dt><dd>Trifásica · gas · agua · fibra</dd>
+    </dl>
+    <div class="p-actions">
+      <button class="btn" type="button" onclick="select('${u.id}')">Cerrar</button>
+      <a class="btn pri" href="https://wa.me/qr/LHY4TWT44CC6P1" target="_blank" rel="noopener">Consultar ${u.id}</a>
+    </div>`;
+}
+
+/* ---------- KPIs ---------- */
+function renderKPIs(){
+  const tot=U.reduce((s,u)=>s+u.ventaUSD,0), alq=U.reduce((s,u)=>s+u.alqUSD,0);
+  const disp=U.filter(u=>u.estado==="disp");
+  const k=[
+    ["Unidades",U.length,`${disp.length} disponibles`],
+    ["Superficie cubierta",fmt(GLA)+" m²",`FOS ${pct(GLA/18000)}`],
+    ["Valor total de venta",usdK(tot),`${usd(Math.round(tot/GLA))}/m² prom.`],
+    ["Renta potencial",usd(alq)+"/mes",`${usd(Math.round(alq/GLA*10)/10)}/m² prom.`],
+    ["Rentabilidad bruta",pct(alq*12/tot),"promedio ponderado"],
+    ["Cocheras",PLAZAS+4,`${(((PLAZAS+4)/GLA)*100).toLocaleString("es-AR",{maximumFractionDigits:1})} c/100 m²`]
+  ];
+  $("#kpis").innerHTML=k.map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("");
+}
+
+/* ---------- Tabla ---------- */
+const COLS=[
+  ["id","Unidad",u=>`<span class="dot" style="background:${TYPES[u.tipo].color};margin-right:6px"></span>${u.id}`],
+  ["rubro","Rubro sugerido",u=>u.rubro],
+  ["estado","Estado",u=>`<span style="color:${STATES[u.estado].color};font-weight:600">${STATES[u.estado].label}</span>`],
+  ["m2","m²",u=>fmt(u.m2)],
+  ["ventaUSD","USD venta",u=>fmt(u.ventaUSD)],
+  ["vta","USD/m² venta",u=>fmt(u.vta)],
+  ["alqUSD","USD alquiler/mes",u=>fmt(u.alqUSD)],
+  ["alq","USD/m² alq.",u=>u.alq.toLocaleString("es-AR")],
+  ["yield","Rent. bruta",u=>pct(u.yield)],
+  ["coch","Cocheras",u=>u.coch||"—"]
+];
+function renderTable(){
+  const rows=[...U].sort((a,b)=>{const x=a[sortKey],y=b[sortKey];return (typeof x==="number"?x-y:String(x).localeCompare(String(y)))*sortDir;});
+  const vis=U.filter(u=>visibleStates.has(u.estado));
+  const sum=k=>vis.reduce((s,u)=>s+u[k],0);
+  $("#tbl").innerHTML=`<thead><tr>${COLS.map(([k,l])=>`<th data-k="${k}" class="${k===sortKey?"sorted":""}">${l}${k===sortKey?(sortDir>0?" ▲":" ▼"):""}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map(u=>`<tr data-id="${u.id}" class="${u.id===selected?"sel":""} ${visibleStates.has(u.estado)?"":"dim"}">${COLS.map(c=>`<td>${c[2](u)}</td>`).join("")}</tr>`).join("")}</tbody>
+    <tfoot><tr><td>Total visible</td><td>${vis.length} unidades</td><td></td><td>${fmt(sum("m2"))}</td><td>${fmt(sum("ventaUSD"))}</td><td>${sum("m2")?fmt(sum("ventaUSD")/sum("m2")):"—"}</td><td>${fmt(sum("alqUSD"))}</td><td>${sum("m2")?(sum("alqUSD")/sum("m2")).toLocaleString("es-AR",{maximumFractionDigits:1}):"—"}</td><td>${sum("ventaUSD")?pct(sum("alqUSD")*12/sum("ventaUSD")):"—"}</td><td>${sum("coch")}</td></tr></tfoot>`;
+  $("#tbl").querySelectorAll("th").forEach(th=>th.onclick=()=>{const k=th.dataset.k;sortDir=k===sortKey?-sortDir:1;sortKey=k;renderTable();});
+  $("#tbl").querySelectorAll("tbody tr").forEach(tr=>tr.onclick=()=>{select(tr.dataset.id);if(innerWidth>1100)$("#plan").scrollIntoView({behavior:"smooth",block:"center"});});
+}
+
+/* ---------- Controles ---------- */
+$("#modeSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  mode=b.dataset.mode;
+  $("#modeSeg").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  paint();
+});
+$("#stateChips").innerHTML=Object.entries(STATES).map(([k,v])=>`<button type="button" class="chip" data-s="${k}" aria-pressed="true"><span class="dot" style="background:${v.color}"></span>${v.label} (${U.filter(u=>u.estado===k).length})</button>`).join("");
+$("#stateChips").querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+  const s=c.dataset.s; visibleStates.has(s)?visibleStates.delete(s):visibleStates.add(s);
+  c.setAttribute("aria-pressed",visibleStates.has(s)); paint();
+});
+$("#themeBtn").onclick=()=>{
+  const r=document.documentElement, dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme=dark?"light":"dark"; paint(); renderPanel();
+};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&selected){selected=null;paint();renderPanel();}});
+
+renderKPIs(); paint(); renderPanel();
+</script>
+</body>
+</html>
