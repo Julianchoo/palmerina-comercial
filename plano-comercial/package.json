@@ -1,0 +1,17 @@
+{
+  "name": "palmerina-plano-comercial",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Plano comercial interactivo y maqueta 3D de Paseo La Palmerina",
+  "type": "module",
+  "scripts": {
+    "render": "node scripts/render.mjs",
+    "serve": "npx --yes http-server -p 8080 -c-1 ."
+  },
+  "dependencies": {
+    "three": "0.169.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.0"
+  }
+}
