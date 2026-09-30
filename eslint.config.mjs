@@ -16,6 +16,7 @@ const config = [
   },
   ...nextConfig,
   {
+    plugins: nextConfig.find((config) => config.name === "next").plugins,
     rules: {
       // React rules
       "react/jsx-no-target-blank": "error",
