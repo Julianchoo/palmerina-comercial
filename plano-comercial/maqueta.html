@@ -95,7 +95,7 @@ function metalMaps(){
   const [c,x]=canvas(256,256), [b,y]=canvas(256,256);
   const g=x.createLinearGradient(0,0,256,0);
   for(const [o,col] of [[0,"#1b1d20"],[.45,"#24272b"],[.5,"#141517"],[.55,"#24272b"],[1,"#1b1d20"]]) g.addColorStop(o,col);
-  x.fillStyle="#1f2124"; x.fillRect(0,0,256,256);
+  x.fillStyle=g; x.fillRect(0,0,256,256);
   for(const sx of [0,128]){x.fillStyle="#3b3f45";x.fillRect(sx,0,4,256);x.fillStyle="#0d0e10";x.fillRect(sx+4,0,3,256);}
   for(let i=0;i<1500;i++){x.fillStyle=`rgba(255,255,255,${R(0,.025)})`;x.fillRect(R(0,256),R(0,256),1,R(2,12));}
   y.fillStyle="#808080";y.fillRect(0,0,256,256);
@@ -107,7 +107,7 @@ function interiorTex(kind){
   const [c,x]=canvas(512,256);
   const warm = kind!=="office";
   const g=x.createLinearGradient(0,0,0,256);
-  g.addColorStop(0, warm?"#f6dfb5":"#e9eef2"); g.addColorStop(.55, warm?"#b98e5c":"#aab4bc"); g.addColorStop(1, warm?"#5d4430":"#59616a");
+  g.addColorStop(0, warm?"#92704c":"#998871"); g.addColorStop(.55, warm?"#79583b":"#6b6256"); g.addColorStop(1, warm?"#392c21":"#363932");
   x.fillStyle=g; x.fillRect(0,0,512,256);
   for(let i=0;i<14;i++){const px=18+i*36; x.fillStyle=warm?"rgba(255,244,214,.9)":"rgba(255,255,255,.9)";
     x.beginPath(); x.ellipse(px,10,10,4,0,0,Math.PI*2); x.fill();}
@@ -132,12 +132,12 @@ function signTex(text,{w=1024,h=192,bg="#101113",fg="#f4f1ea",font="600",sub=""}
 
 /* Materiales */
 const M = {
-  brick: new THREE.MeshStandardMaterial({...brickMaps(), bumpScale:1.2, roughness:.92}),
-  metal: new THREE.MeshStandardMaterial({...metalMaps(), bumpScale:1.5, roughness:.55, metalness:.55}),
-  steel: new THREE.MeshStandardMaterial({color:0x17181a, roughness:.45, metalness:.7}),
+  brick: new THREE.MeshStandardMaterial({...brickMaps(), bumpScale:.045, roughness:.92}),
+  metal: new THREE.MeshStandardMaterial({...metalMaps(), bumpScale:.025, roughness:.78, metalness:.32}),
+  steel: new THREE.MeshStandardMaterial({color:0x17181a, roughness:.56, metalness:.55}),
   roof:  new THREE.MeshStandardMaterial({color:0x2a2c2f, roughness:.85, metalness:.2}),
   slab:  new THREE.MeshStandardMaterial({color:0xa5a29c, roughness:.9}),
-  glass: new THREE.MeshStandardMaterial({color:0x1d2a33, roughness:.04, metalness:.85, transparent:true, opacity:.5, envMapIntensity:1.8}),
+  glass: new THREE.MeshPhysicalMaterial({color:0xc4d1d0, roughness:.08, metalness:.02, transparent:true, opacity:.12, depthWrite:false, envMapIntensity:.25, clearcoat:.12, clearcoatRoughness:.12}),
   rail:  new THREE.MeshStandardMaterial({color:0x9fb3bd, roughness:.05, metalness:.3, transparent:true, opacity:.22}),
   wood:  new THREE.MeshStandardMaterial({color:0x6e4f35, roughness:.8}),
   concrete: new THREE.MeshStandardMaterial({color:0x8f8c86, roughness:.95}),
@@ -169,6 +169,69 @@ function box(mat,x0,x1,y0,y1,z0,z1,{cast=true,recv=true,parent=scene}={}){
   m.castShadow=cast; m.receiveShadow=recv; parent.add(m); return m;
 }
 function plane(mat,w,h,pos,rotY=0){const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),mat);m.position.set(...pos);m.rotation.y=rotY;scene.add(m);return m;}
+
+/* Mobiliario real, agrupado por material: un cubo compartido y pocas llamadas de dibujo.
+   La franja interior se vacía dentro de la huella existente; no ocupa galerías ni pasarelas. */
+const furnishingBatches = new Map();
+const F = {
+  oak:new THREE.MeshStandardMaterial({color:0x8b613b,roughness:.78}),
+  plaster:new THREE.MeshStandardMaterial({color:0x948571,roughness:.95}),
+  fabric:new THREE.MeshStandardMaterial({color:0x71604e,roughness:1}),
+  books:new THREE.MeshStandardMaterial({color:0x9b7852,roughness:.85}),
+  screen:new THREE.MeshStandardMaterial({color:0x15252d,roughness:.28,metalness:.12}),
+};
+function furnishing(mat,u,y,v,w,h,d,loc){
+  const [x,z]=loc(u,v), [xx,zz]=loc(u+w,v+d);
+  const transform=new THREE.Matrix4().compose(new THREE.Vector3(x,y,z),new THREE.Quaternion(),new THREE.Vector3(Math.abs(xx-x)||d,h,Math.abs(zz-z)||w));
+  // loc maps either the strip's horizontal axis or the anchors' rotated horizontal axis.
+  if(!furnishingBatches.has(mat))furnishingBatches.set(mat,[]);
+  furnishingBatches.get(mat).push(transform);
+}
+function room(a,b,loc,floor,ceiling,kind,depth){
+  const part=(mat,u,y,v,w,h,d)=>furnishing(mat,u,floor+y,v,w,h,d,loc);
+  part(F.oak,(a+b)/2,.055,depth/2,b-a,.1,depth);
+  part(F.plaster,(a+b)/2,ceiling-floor-.07,depth/2,b-a,.12,depth);
+  for(const edge of [a+.06,b-.06])part(F.plaster,edge,(ceiling-floor)/2,depth/2,.12,ceiling-floor,depth);
+  const table=(u,v,office=false)=>{
+    part(F.oak,u,.78,v,office?1.7:1.35,.1,.8);
+    for(const du of [-.55,.55])for(const dv of [-.26,.26])part(M.steel,u+du,.4,v+dv,.045,.72,.045);
+    part(F.fabric,u,.46,v-.75,.55,.12,.52);
+    part(F.fabric,u,.78,v-1,.55,.65,.08);
+    for(const du of [-.2,.2])part(M.steel,u+du,.23,v-.75,.04,.42,.4);
+    if(office){part(F.screen,u,.99,v+.12,.58,.34,.055);part(M.steel,u,.83,v+.12,.25,.06,.22);}
+  };
+  for(let u=a+2;u<b-1.2;u+=kind==="office"?5:4.5){
+    if(kind==="office"||kind==="dining"||kind==="medical")table(u,2.4,kind!=="dining");
+    else if(kind==="fitness"){
+      part(M.steel,u,.17,2.5,1,.2,1.8);part(F.screen,u,1.05,3.1,.65,.3,.08);
+      part(M.steel,u,.66,3.05,.1,1.05,.1);
+    }else{
+      // Open shelving and individually modelled stock stand in front of the rear backdrop.
+      for(const du of [-.72,.72])part(M.steel,u+du,1.15,depth-.7,.045,2.2,.55);
+      for(const y of [.35,.95,1.55,2.15]){
+        part(F.oak,u,y,depth-.7,1.5,.055,.6);
+        for(let k=0;k<4;k++)part(F.books,u-.53+k*.34,y+.18,depth-.7,.22,.3,.26);
+      }
+      if(kind==="home")table(u,2.1);
+    }
+    // Pendant housing, stem and diffuser, all behind the glazing.
+    part(M.steel,u,ceiling-floor-.5,2.1,.025,.65,.025);
+    part(M.steel,u,ceiling-floor-.88,2.1,.42,.12,.42);
+    part(LAMP,u,ceiling-floor-.95,2.1,.34,.025,.34);
+  }
+  if(kind==="retail"||kind==="medical"){
+    part(F.oak,b-1.4,.56,1.6,1.8,1.05,.75);part(M.steel,b-1.4,1.1,1.6,1.85,.045,.8);
+  }
+}
+function flushFurnishings(){
+  const geometry=new THREE.BoxGeometry(1,1,1);
+  for(const [material,transforms]of furnishingBatches){
+    const mesh=new THREE.InstancedMesh(geometry,material,transforms.length);
+    transforms.forEach((transform,i)=>mesh.setMatrixAt(i,transform));
+    mesh.castShadow=true;mesh.receiveShadow=true;mesh.computeBoundingSphere();scene.add(mesh);
+  }
+  furnishingBatches.clear();
+}
 
 /* ---------- Suelo (textura única dibujada desde el plano) ---------- */
 const X0=-40,X1=200,Y0=-30,Y1=130,PX=16;
@@ -225,8 +288,8 @@ function strip({f,s,units}){
   const back=f-s*16, zr=(a,b)=>{const z1=f-s*a,z2=f-s*b;return [Math.min(z1,z2),Math.max(z1,z2)];};
   const XA=20, XB=132.5;
   // volúmenes posteriores (chapa negra)
-  box(M.metal,XA,XB,0,H_PB,...zr(1.2,16));
-  box(M.metal,XA,XB,H_PB+.35,H_1P,...zr(.6,16));
+  box(M.metal,XA,XB,0,H_PB,...zr(4.8,16));
+  box(M.metal,XA,XB,H_PB+.35,H_1P,...zr(3.8,16));
   box(M.roof,XA,XB,H_1P,H_1P+.25,...zr(0,16));
   // parapeto perimetral
   box(M.metal,XA,XB,H_1P,H_PAR,...zr(-.15,.1)); box(M.metal,XA,XB,H_1P,H_PAR,...zr(15.8,16));
@@ -237,7 +300,9 @@ function strip({f,s,units}){
     for(const cx of CORES){ if(cx>=a&&cx<b){ if(cx===a)a=cx+5; else b=cx; } }
     const gw=b-a-.9;
     // interior + vidrio + parantes
-    plane(INT_SHOP,gw,GLZ,[ (a+b)/2, GLZ/2, f-s*1.15 ], s>0?0:Math.PI);
+    plane(INT_SHOP,gw,GLZ,[ (a+b)/2, GLZ/2, f-s*4.75 ], s>0?0:Math.PI);
+    const kind=/FUEGO|LÚPULO|GELATO|milo/.test(brand)?"dining":/CONSULTORIOS|CRÉDITO/.test(brand)?"medical":/CASA|casak/.test(brand)?"home":"retail";
+    room(a+.45,b-.45,(u,v)=>[u,f-s*v],0,GLZ,kind,4.7);
     box(M.steel,a,b,0,.05,...zr(0,1.2),{cast:false});
     box(M.glass,a+.45,b-.45,0,GLZ,...zr(.02,.06),{cast:false});
     const n=Math.max(2,Math.round(gw/2.5));
@@ -268,6 +333,9 @@ function strip({f,s,units}){
   // losa del 1er piso + pasarela en voladizo (2 m)
   box(M.slab,XA,XB,H_PB,H_PB+.35,...zr(-2,16));
   box(M.steel,XA,XB,H_PB,H_PB+.35,...zr(-2.05,-1.95));
+  // Fascia mate continua, viga de borde y nervios metálicos bajo el voladizo.
+  box(M.metal,XA,XB,H_PB-.18,H_PB+.35,...zr(-2.1,-1.95));
+  for(let px=XA+.8;px<XB;px+=3.125)box(M.steel,px-.04,px+.04,H_PB-.16,H_PB,...zr(-1.9,0),{cast:false});
   // barandas vidriadas + pasamanos
   box(M.rail,XA,XB,H_PB+.35,H_PB+1.35,...zr(-1.98,-1.94),{cast:false});
   box(M.steel,XA,XB,H_PB+1.3,H_PB+1.38,...zr(-2.02,-1.9));
@@ -281,7 +349,13 @@ function strip({f,s,units}){
     pool(cx,f+s*1.1,2.2,2.2,0xffd9a0,.55);}
   { const sp=pool((XA+XB)/2,f+s*3,(XB-XA)/2,3,0xffc27a,.5,{map:spillTex}); if(s<0) sp.rotation.z=Math.PI; }
   // 1P: muro cortina con parasoles verticales
-  plane(INT_OFF,XB-XA-.4,H_1P-H_PB-.6,[(XA+XB)/2,(H_PB+H_1P+.4)/2,f-s*.62],s>0?0:Math.PI);
+  plane(INT_OFF,XB-XA-.4,H_1P-H_PB-.6,[(XA+XB)/2,(H_PB+H_1P+.4)/2,f-s*3.75],s>0?0:Math.PI);
+  // Una oficina por módulo, evitando los dos núcleos existentes.
+  units.forEach(([,x0,w])=>{
+    let a=x0+.45,b=x0+w-.45;
+    for(const cx of CORES){if(cx>=x0&&cx<x0+w){if(cx===x0)a=cx+5.45;else b=cx-.45;}}
+    room(a,b,(u,v)=>[u,f-s*v],H_PB+.35,H_1P,"office",3.7);
+  });
   box(M.glass,XA+.1,XB-.1,H_PB+.35,H_1P,...zr(.02,.06),{cast:false});
   for(let px=XA+.6;px<XB-.3;px+=1.25) box(M.steel,px-.04,px+.04,H_PB+.35,H_1P,...zr(-.4,.05));
   box(M.metal,XA,XB,H_1P-.15,H_PAR,...zr(-.3,.6));
@@ -292,10 +366,11 @@ STRIPS.forEach(strip);
 const ANCHORS=[["A-01",2,47,"MERCADO","SUPERMERCADO"],["A-02",53,78,"RUN FIT","TRAINING CLUB"],["A-03",78,98,"CENTRO MÉDICO","SALUD INTEGRAL"]];
 ANCHORS.forEach(([id,z0,z1,brand,sub],i)=>{
   const Ha = i===0?9:8, gl=5.4, a=z0+.45, b=z1-.45;
-  box(M.metal,145.4,176,0,Ha,z0,z1);
+  box(M.metal,148.8,176,0,Ha,z0,z1);
   box(M.roof,144,176,Ha,Ha+.2,z0,z1);
   box(M.metal,144,145.4,gl,Ha,z0,z1);
-  plane(INT_SHOP,b-a,gl,[145.3,gl/2,(a+b)/2],-Math.PI/2);
+  plane(INT_SHOP,b-a,gl,[148.75,gl/2,(a+b)/2],-Math.PI/2);
+  room(a,b,(u,v)=>[144+v,u],0,gl,i===0?"retail":i===1?"fitness":"medical",4.7);
   box(M.glass,143.96,144,0,gl,a,b,{cast:false});
   const n=Math.round((b-a)/3); for(let k=0;k<=n;k++){const mz=a+k*(b-a)/n; box(M.steel,143.9,144.08,0,gl,mz-.06,mz+.06);}
   box(M.steel,143.9,144.08,2.9,3,a,b); box(M.steel,143.9,145.4,gl-.02,gl,a,b,{cast:false});
@@ -304,6 +379,7 @@ ANCHORS.forEach(([id,z0,z1,brand,sub],i)=>{
   const sw=Math.min((b-a)*.55,14), sg=new THREE.Mesh(new THREE.PlaneGeometry(sw,sw*.1875),new THREE.MeshBasicMaterial({map:signTex(brand,{sub})}));
   sg.position.set(143.93,(gl+Ha)/2+.3,(a+b)/2); sg.rotation.y=-Math.PI/2; scene.add(sg);
 });
+flushFurnishings();
 
 /* ---------- Pads frente a ruta y kioscos ---------- */
 [["P-01",4,"CAFÉ DEL PASEO"],["P-02",80,"HELADOS 58"]].forEach(([id,z0,brand])=>{
