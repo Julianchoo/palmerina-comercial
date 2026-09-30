@@ -12,21 +12,21 @@
   --line:#e2ddd2; --primary:#1a5f7a; --primary-2:#2d8caa; --deep:#0f3d4f; --gold:#d4a574; --gold-2:#b8915f;
   --plot:#fbfaf6; --green:#dfe8d6; --green-2:#c9d9ba; --road:#6f7470; --road-2:#8a8f8a; --walk:#e6d6b3; --park:#e4e2dc; --stall:#b4b2aa;
   --dim:#a4552b; --st-disp:#2f9e6e; --st-res:#e0a526; --st-vend:#c2544a; --st-alq:#5a6fd6;
-  --t-kiosco:#d4a574; --t-pad:#b8915f; --t-200:#7fb8cc; --t-400:#2d8caa; --t-600:#1a5f7a; --t-ancla:#0f3d4f;
+  --t-kiosco:#d4a574; --t-pad:#b8915f; --t-200:#7fb8cc; --t-400:#2d8caa; --t-600:#1a5f7a; --t-ancla:#0f3d4f; --t-of:#9b87c9;
   --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 16px rgba(16,24,40,.06);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --dim:#f0b47e; --bg:#10141f; --surface:#171d2b; --surface-2:#1e2536; --ink:#eef1f6; --ink-2:#b6bdca; --muted:#7f8797;
     --line:#2a3246; --plot:#1a2130; --green:#233327; --green-2:#2c4131; --road:#3c4250; --road-2:#4a5160; --walk:#4a4232; --park:#222a38; --stall:#3a4254;
-    --t-200:#8cc6da; --t-400:#3ba3c4; --t-600:#2a7f9e; --t-ancla:#6fa3b8;
+    --t-200:#8cc6da; --t-400:#3ba3c4; --t-600:#2a7f9e; --t-ancla:#6fa3b8; --t-of:#b3a3e0;
     --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
   }
 }
 :root[data-theme="dark"]{
   --dim:#f0b47e; --bg:#10141f; --surface:#171d2b; --surface-2:#1e2536; --ink:#eef1f6; --ink-2:#b6bdca; --muted:#7f8797;
   --line:#2a3246; --plot:#1a2130; --green:#233327; --green-2:#2c4131; --road:#3c4250; --road-2:#4a5160; --walk:#4a4232; --park:#222a38; --stall:#3a4254;
-  --t-200:#8cc6da; --t-400:#3ba3c4; --t-600:#2a7f9e; --t-ancla:#6fa3b8;
+  --t-200:#8cc6da; --t-400:#3ba3c4; --t-600:#2a7f9e; --t-ancla:#6fa3b8; --t-of:#b3a3e0;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
 }
 *{box-sizing:border-box}
@@ -73,6 +73,12 @@ h1{margin:2px 0 0;font-size:26px;letter-spacing:-.01em}
 .unit:focus{outline:none}
 .unit:focus-visible rect.body,.unit.sel rect.body{stroke:var(--gold);stroke-width:1}
 .unit.dim{opacity:.18}
+.unit.ghost{opacity:.2;pointer-events:none}
+.unit.hidden,.floor-1{display:none}
+.plan-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:2px 4px 8px}
+.plan-head .note{margin:0}
+.core rect{fill:var(--road-2);stroke:var(--surface);stroke-width:.3}
+.walkway{fill:var(--walk);opacity:.9}
 .unit text{pointer-events:none;font-family:Inter,sans-serif;text-anchor:middle;dominant-baseline:middle}
 .unit .uid{font-weight:700;font-size:2.6px}
 .unit .um2{font-size:1.9px;opacity:.9}
@@ -116,7 +122,7 @@ dl.facts dd{margin:0;text-align:right;font-weight:500;font-variant-numeric:tabul
 .tbl-scroll{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
 th,td{padding:8px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
-th:first-child,td:first-child,th:nth-child(2),td:nth-child(2),th:nth-child(3),td:nth-child(3){text-align:left}
+th:nth-child(-n+4),td:nth-child(-n+4){text-align:left}
 th{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;cursor:pointer;background:var(--surface);position:sticky;top:0}
 th.sorted{color:var(--primary)}
 tbody tr{cursor:pointer}
@@ -136,7 +142,7 @@ tfoot td{font-weight:700;border-bottom:0}
     <div>
       <div class="eyebrow">Paseo Comercial · Canning · RP58</div>
       <h1>La Palmerina — Plano comercial interactivo</h1>
-      <div class="sub">Parcela 100 × 180 m · 19 unidades funcionales · Tocá una unidad para ver su ficha</div>
+      <div class="sub">Parcela 100 × 180 m · 37 unidades en 2 plantas · Tocá una unidad para ver su ficha</div>
     </div>
     <button class="theme-btn" id="themeBtn" type="button">◐ Tema</button>
   </header>
@@ -158,6 +164,13 @@ tfoot td{font-weight:700;border-bottom:0}
 
   <div class="main">
     <div class="card plan-card">
+      <div class="plan-head">
+        <div class="seg" id="floorSeg" role="group" aria-label="Planta">
+          <button type="button" data-f="0" aria-pressed="true">Planta baja · comercial</button>
+          <button type="button" data-f="1" aria-pressed="false">Primer piso · oficinas</button>
+        </div>
+        <span class="note" id="floorNote"></span>
+      </div>
       <div class="plan-scroll"><svg id="plan" viewBox="-16 -12 206 120" role="img" aria-label="Plano de implantación de La Palmerina"></svg></div>
       <div class="legend" id="legend"></div>
     </div>
@@ -183,7 +196,8 @@ const TYPES = {
   "200":{label:"Local 200 m²", color:"var(--t-200)"},
   "400":{label:"Local 400 m²", color:"var(--t-400)"},
   "600":{label:"Local 600 m²", color:"var(--t-600)"},
-  ancla:{label:"Local ancla", color:"var(--t-ancla)"}
+  ancla:{label:"Local ancla", color:"var(--t-ancla)"},
+  oficina:{label:"Oficina 1er piso", color:"var(--t-of)"}
 };
 const STATES = {
   disp:{label:"Disponible", color:"var(--st-disp)"},
@@ -212,15 +226,30 @@ const U = [
   {id:"L-11",tipo:"200",x:82.5,y:82,w:12.5,h:16,exp:30,vta:2300,alq:18,estado:"disp",rubro:"Librería / jugueteria",vis:"Frente a estacionamiento",etapa:2,coch:4},
   {id:"L-12",tipo:"600",x:95,y:82,w:37.5,h:16,exp:90,vta:2100,alq:16,estado:"disp",rubro:"Pádel indoor / kids",vis:"Frente a paseo peatonal",etapa:2,coch:12},
   // Anclas (fondo)
-  {id:"A-01",tipo:"ancla",x:144,y:2,w:32,h:45,exp:0,vta:1650,alq:11,estado:"res",rubro:"Supermercado",vis:"Remate de avenida central",etapa:2,coch:40},
+  {id:"A-01",tipo:"ancla",x:144,y:2,w:32,h:45,exp:0,vta:1650,alq:11,estado:"res",rubro:"Supermercado",vis:"Remate de avenida central",etapa:2,coch:30},
   {id:"A-02",tipo:"ancla",x:144,y:53,w:32,h:25,exp:0,vta:1800,alq:12,estado:"disp",rubro:"Gimnasio / fitness",vis:"Frente a paseo peatonal",etapa:2,coch:20},
   {id:"A-03",tipo:"ancla",x:144,y:78,w:32,h:20,exp:0,vta:1900,alq:12.5,estado:"disp",rubro:"Centro médico",vis:"Frente a paseo peatonal",etapa:2,coch:16}
 ];
+/* Primer piso: oficinas sobre las tiras, entre núcleos de escalera + ascensor en cada extremo */
+const NUCLEOS = [[20,2],[127.5,2],[20,82],[127.5,82]];   // 5 × 16 m c/u
+const OF_PRECIO = {7.5:[1950,14],10:[1900,13.5],12.5:[1850,13],15:[1800,12.5],20:[1750,12]};
+[
+  {y:2, anchos:[10,10,7.5,7.5,15,10,10,12.5,20],
+   rubros:["Estudio contable","Consultorio odontológico","Oficina","Oficina","Coworking","Estudio jurídico","Kinesiología","Inmobiliaria","Oficinas corporativas"],
+   estados:["disp","res","vend","disp","disp","alq","disp","res","disp"]},
+  {y:82, anchos:[20,10,7.5,7.5,10,15,12.5,10,10],
+   rubros:["Centro de capacitación","Psicología","Oficina","Oficina","Arquitectura","Consultorios médicos","Agencia de seguros","Oficina","Estudio de diseño"],
+   estados:["disp","disp","disp","vend","res","disp","disp","alq","disp"]}
+].forEach(t=>{let x=25;t.anchos.forEach((w,i)=>{const [vta,alq]=OF_PRECIO[w];
+  U.push({id:"O-"+String(U.filter(u=>u.piso===1).length+1).padStart(2,"0"),tipo:"oficina",piso:1,x,y:t.y,w,h:16,exp:0,vta,alq,
+    estado:t.estados[i],rubro:t.rubros[i],vis:"Pasarela de acceso · vista a estacionamiento",etapa:3,coch:w>=15?2:1});
+  x+=w;});});
 const EXPENSAS_M2 = 2.2;      // USD/m²/mes
-const ALTURA = {kiosco:3.2,pad:4.5,"200":6,"400":6,"600":6,ancla:7.5};
+const ALTURA = {kiosco:3.2,pad:4.5,"200":6,"400":6,"600":6,ancla:7.5,oficina:3};
 U.forEach(u=>{
-  u.frente = Math.min(u.w,u.h); u.fondo = Math.max(u.w,u.h);
-  if(u.tipo==="kiosco"){u.frente=u.w;u.fondo=u.h;}
+  u.piso = u.piso||0;
+  // anclas y pads dan su frente al eje Y (paseo / ruta); el resto, al eje X
+  if(u.tipo==="ancla"||u.tipo==="pad"){u.frente=u.h;u.fondo=u.w;}else{u.frente=u.w;u.fondo=u.h;}
   u.m2 = +(u.w*u.h).toFixed(1);
   u.ventaUSD = Math.round(u.m2*u.vta/1000)*1000;
   u.alqUSD = Math.round(u.m2*u.alq/10)*10;
@@ -230,13 +259,15 @@ U.forEach(u=>{
   u.altura = ALTURA[u.tipo];
 });
 const GLA = U.reduce((s,u)=>s+u.m2,0);
+const GLA_PB = U.filter(u=>!u.piso).reduce((s,u)=>s+u.m2,0), GLA_1P = GLA-GLA_PB;
+const NUCLEOS_M2 = NUCLEOS.length*5*16;
 /* Indicadores urbanísticos */
 const PARCELA_M2 = 18000;
 const FOS_MAX = 0.6, FOT_MAX = 1.2;
 const GALERIAS_M2 = 2*112.5*2;   // veredas cubiertas frente a las tiras
-const PLANTAS = 1;
-const HUELLA = GLA + GALERIAS_M2; // cubierto computable; decks de expansión son descubiertos
-const FOS = HUELLA/PARCELA_M2, FOT = HUELLA*PLANTAS/PARCELA_M2;
+const HUELLA = GLA_PB + GALERIAS_M2; // cubierto computable; decks de expansión son descubiertos
+const SUP_1P = GLA_1P + NUCLEOS_M2;  // pasarelas abiertas no computan
+const FOS = HUELLA/PARCELA_M2, FOT = (HUELLA+SUP_1P)/PARCELA_M2;
 
 /* ---------- Helpers ---------- */
 const fmt = n=>n.toLocaleString("es-AR",{maximumFractionDigits:0});
@@ -317,11 +348,19 @@ function drawSite(){
 }
 const PLAZAS = drawSite();
 const unitLayer=el("g",{},svg);
+const upperLayer=el("g",{class:"floor-1"},svg);
+(()=>{const g=upperLayer;
+  for(const y of [18,80]){el("rect",{class:"walkway",x:20,y,width:112.5,height:2},g);
+    el("text",{x:50,y:y+1,class:"lbl","font-size":1.1},g).textContent="PASARELA DE ACCESO · 2 m";}
+  for(const [x,y] of NUCLEOS){const c=el("g",{class:"core"},g);
+    el("rect",{x,y,width:5,height:16,rx:.3},c);
+    el("text",{x:x+2.5,y:y+8,class:"lbl-w","font-size":1.2,transform:`rotate(-90 ${x+2.5} ${y+8})`},c).textContent="ESCALERA + ASCENSOR";}
+})();
 const unitEls={};
 U.forEach(u=>{
-  const g=el("g",{class:"unit",tabindex:0,role:"button","aria-label":`${u.id}, ${u.m2} m², ${STATES[u.estado].label}`},unitLayer);
+  const g=el("g",{class:"unit",tabindex:0,role:"button","aria-label":`${u.id}, ${u.piso?"primer piso":"planta baja"}, ${u.m2} m², ${STATES[u.estado].label}`},u.piso?upperLayer:unitLayer);
   el("rect",{class:"body",x:u.x,y:u.y,width:u.w,height:u.h,rx:.4},g);
-  const cx=u.x+u.w/2, cy=u.y+u.h/2, small=u.w<8;
+  const cx=u.x+u.w/2, cy=u.y+u.h/2, small=Math.min(u.w,u.h)<7;
   const t1=el("text",{class:"uid",x:cx,y:small?cy:cy-1.5,"font-size":small?1.9:2.6},g); t1.textContent=u.id;
   if(!small){const t2=el("text",{class:"um2",x:cx,y:cy+1.8},g); t2.textContent=fmt(u.m2)+" m²";}
   g.addEventListener("click",()=>select(u.id));
@@ -369,10 +408,12 @@ function chainV(g,ys,x,o){for(let i=0;i<ys.length-1;i++)dimV(g,x,ys[i],ys[i+1],o
   dimV(g,-2,45,55,{fs:1.2,side:-1,label:"Acceso 10,00"});
 })();
 // Unidades: frente × fondo de cada local
-U.forEach(u=>{const g=dimG.unid;
+const dimU=[el("g",{},dimG.unid),el("g",{class:"floor-1"},dimG.unid)];
+U.forEach(u=>{const g=dimU[u.piso];
   if(u.tipo==="kiosco"){dimH(g,u.x,u.x+u.w,u.y-1.1,{fs:1.1});dimV(g,u.x-1.1,u.y,u.y+u.h,{fs:1.1});return;}
   const top=u.y<50, hy=top?u.y+1.4:u.y+u.h-1.4;
   dimH(g,u.x,u.x+u.w,hy,{fs:1.2,side:top?1:-1});
+  if(u.tipo==="oficina"){ if(u.x===25) dimV(g,u.x+1.3,u.y,u.y+u.h,{fs:1.2,side:1}); return; } // todas con fondo 16 m
   if(u.tipo==="pad") dimV(g,u.x-1.1,u.y,u.y+u.h,{fs:1.1});
   else dimV(g,u.x+1.3,u.y,u.y+u.h,{fs:1.2,side:1});
 });
@@ -390,6 +431,19 @@ $("#dimAll").onclick=()=>{const all=dimOn.size===Object.keys(DIM_LAYERS).length;
   dimOn.clear(); if(!all)Object.keys(DIM_LAYERS).forEach(k=>dimOn.add(k)); syncDims();};
 syncDims();
 
+/* ---------- Planta activa ---------- */
+let floor=0;
+function setFloor(f){
+  floor=f;
+  upperLayer.style.display=dimU[1].style.display=f?"inline":"none";
+  dimU[0].style.display=f?"none":"inline";
+  $("#floorSeg").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.f===f));
+  const us=U.filter(u=>u.piso===f), m2=us.reduce((s,u)=>s+u.m2,0);
+  $("#floorNote").textContent=f?`${us.length} oficinas · ${fmt(m2)} m² · planta baja en transparencia`:`${us.length} unidades comerciales · ${fmt(m2)} m²`;
+  paint();
+}
+$("#floorSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>setFloor(+b.dataset.f));
+
 /* ---------- Color ---------- */
 const vRange=[Math.min(...U.map(u=>u.vta)),Math.max(...U.map(u=>u.vta))];
 const yRange=[Math.min(...U.map(u=>u.yield)),Math.max(...U.map(u=>u.yield))];
@@ -406,6 +460,8 @@ function paint(){
     g.querySelectorAll("text").forEach(t=>t.setAttribute("fill",textOn(c)));
     g.classList.toggle("dim",!visibleStates.has(u.estado));
     g.classList.toggle("sel",u.id===selected);
+    g.classList.toggle("ghost",floor===1&&u.piso===0);
+    g.setAttribute("tabindex",u.piso===floor?0:-1);
   });
   renderLegend(); renderTable();
 }
@@ -434,7 +490,9 @@ function showTip(e,u){
 function hideTip(){tip.style.opacity=0;}
 
 /* ---------- Panel de detalle ---------- */
-function select(id){selected=selected===id?null:id;paint();renderPanel();
+function select(id){selected=selected===id?null:id;
+  const u=U.find(x=>x.id===selected); if(u&&u.piso!==floor)setFloor(u.piso);
+  paint();renderPanel();
   if(selected&&innerWidth<=1100)$("#panel").scrollIntoView({behavior:"smooth",block:"start"});}
 function renderPanel(){
   const P=$("#panel"), u=U.find(x=>x.id===selected);
@@ -464,12 +522,13 @@ function renderPanel(){
     </div>
     <div class="p-sec">Ficha</div>
     <dl class="facts">
+      <dt>Planta</dt><dd>${u.piso?"Primer piso":"Planta baja"}</dd>
       <dt>Ubicación</dt><dd>${u.vis}</dd>
       <dt>Cocheras asignadas</dt><dd>${u.coch||"—"}</dd>
-      <dt>Etapa de entrega</dt><dd>Etapa ${u.etapa} · ${u.etapa===1?"2º sem. 2027":"1º sem. 2028"}</dd>
+      <dt>Etapa de entrega</dt><dd>Etapa ${u.etapa} · ${["","2º sem. 2027","1º sem. 2028","2º sem. 2028"][u.etapa]}</dd>
       <dt>Incidencia sobre GLA</dt><dd>${pct(u.m2/GLA)}</dd>
       <dt>USD/m² vs. promedio</dt><dd>${diff>=0?"+":""}${pct(diff)}</dd>
-      <dt>Servicios</dt><dd>Trifásica · gas · agua · fibra</dd>
+      <dt>Servicios</dt><dd>${u.piso?"Eléctrica · agua · fibra · A/C preinstalado":"Trifásica · gas · agua · fibra"}</dd>
     </dl>
     <div class="p-actions">
       <button class="btn" type="button" onclick="select('${u.id}')">Cerrar</button>
@@ -483,7 +542,7 @@ function renderKPIs(){
   const disp=U.filter(u=>u.estado==="disp");
   const k=[
     ["Unidades",U.length,`${disp.length} disponibles`],
-    ["Superficie cubierta",fmt(GLA)+" m²",`+ ${fmt(GALERIAS_M2)} m² galerías`],
+    ["Superficie vendible",fmt(GLA)+" m²",`PB ${fmt(GLA_PB)} · 1P ${fmt(GLA_1P)}`],
     ["Valor de venta",usdK(tot),`${usd(Math.round(tot/GLA))}/m² prom.`],
     ["Renta potencial",usdK(alq),`por mes · ${usd(Math.round(alq/GLA*10)/10)}/m² prom.`],
     ["Rentabilidad bruta",pct(alq*12/tot),"promedio ponderado"],
@@ -494,14 +553,15 @@ function renderKPIs(){
     return `<div class="norm-row"><span>${lbl} <b>${n2(v)}</b> / ${n2(max)}</span><span style="color:${c}">${r>1?"Excede":pct(r)+" usado"}</span></div>
       <div class="norm-bar"><i style="width:${Math.min(r,1)*100}%;background:${c}"></i></div>`;};
   $("#kpis").innerHTML=k.map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("")
-    +`<div class="kpi norm" title="Computa locales + galerías cubiertas (${fmt(HUELLA)} m²). Decks de expansión descubiertos no computan.">
+    +`<div class="kpi norm" title="FOS: locales PB + galerías cubiertas = ${fmt(HUELLA)} m². FOT: suma el 1er piso (oficinas + núcleos) = ${fmt(HUELLA+SUP_1P)} m². No computan decks descubiertos ni pasarelas abiertas.">
         <div class="l">Normativa</div>${row("FOS",FOS,FOS_MAX)}${row("FOT",FOT,FOT_MAX)}
-        <div class="s" style="margin-top:5px">Remanente: ${fmt(FOS_MAX*PARCELA_M2-HUELLA)} m² de huella · ${fmt(FOT_MAX*PARCELA_M2-HUELLA*PLANTAS)} m² construibles</div></div>`;
+        <div class="s" style="margin-top:5px">Remanente: ${fmt(FOS_MAX*PARCELA_M2-HUELLA)} m² de huella · ${fmt(FOT_MAX*PARCELA_M2-HUELLA-SUP_1P)} m² construibles</div></div>`;
 }
 
 /* ---------- Tabla ---------- */
 const COLS=[
   ["id","Unidad",u=>`<span class="dot" style="background:${TYPES[u.tipo].color};margin-right:6px"></span>${u.id}`],
+  ["piso","Planta",u=>u.piso?"1P":"PB"],
   ["rubro","Rubro sugerido",u=>u.rubro],
   ["estado","Estado",u=>`<span style="color:${STATES[u.estado].color};font-weight:600">${STATES[u.estado].label}</span>`],
   ["m2","m²",u=>fmt(u.m2)],
@@ -518,7 +578,7 @@ function renderTable(){
   const sum=k=>vis.reduce((s,u)=>s+u[k],0);
   $("#tbl").innerHTML=`<thead><tr>${COLS.map(([k,l])=>`<th data-k="${k}" class="${k===sortKey?"sorted":""}">${l}${k===sortKey?(sortDir>0?" ▲":" ▼"):""}</th>`).join("")}</tr></thead>
     <tbody>${rows.map(u=>`<tr data-id="${u.id}" class="${u.id===selected?"sel":""} ${visibleStates.has(u.estado)?"":"dim"}">${COLS.map(c=>`<td>${c[2](u)}</td>`).join("")}</tr>`).join("")}</tbody>
-    <tfoot><tr><td>Total visible</td><td>${vis.length} unidades</td><td></td><td>${fmt(sum("m2"))}</td><td>${fmt(sum("ventaUSD"))}</td><td>${sum("m2")?fmt(sum("ventaUSD")/sum("m2")):"—"}</td><td>${fmt(sum("alqUSD"))}</td><td>${sum("m2")?(sum("alqUSD")/sum("m2")).toLocaleString("es-AR",{maximumFractionDigits:1}):"—"}</td><td>${sum("ventaUSD")?pct(sum("alqUSD")*12/sum("ventaUSD")):"—"}</td><td>${sum("coch")}</td></tr></tfoot>`;
+    <tfoot><tr><td>Total visible</td><td></td><td>${vis.length} unidades</td><td></td><td>${fmt(sum("m2"))}</td><td>${fmt(sum("ventaUSD"))}</td><td>${sum("m2")?fmt(sum("ventaUSD")/sum("m2")):"—"}</td><td>${fmt(sum("alqUSD"))}</td><td>${sum("m2")?(sum("alqUSD")/sum("m2")).toLocaleString("es-AR",{maximumFractionDigits:1}):"—"}</td><td>${sum("ventaUSD")?pct(sum("alqUSD")*12/sum("ventaUSD")):"—"}</td><td>${sum("coch")}</td></tr></tfoot>`;
   $("#tbl").querySelectorAll("th").forEach(th=>th.onclick=()=>{const k=th.dataset.k;sortDir=k===sortKey?-sortDir:1;sortKey=k;renderTable();});
   $("#tbl").querySelectorAll("tbody tr").forEach(tr=>tr.onclick=()=>{select(tr.dataset.id);if(innerWidth>1100)$("#plan").scrollIntoView({behavior:"smooth",block:"center"});});
 }
@@ -540,7 +600,7 @@ $("#themeBtn").onclick=()=>{
 };
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&selected){selected=null;paint();renderPanel();}});
 
-renderKPIs(); paint(); renderPanel();
+renderKPIs(); setFloor(0); renderPanel();
 </script>
 </body>
 </html>
