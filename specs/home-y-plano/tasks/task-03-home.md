@@ -2,7 +2,7 @@
 
 ## Status
 
-pending
+complete
 
 ## Wave
 
@@ -27,6 +27,8 @@ Rearmar home / alrededor del paseo actual con las imágenes fotorrealistas aprob
 
 - `src/app/home.module.css` — estilos aislados.
 - `src/components/home/` — componentes cliente mínimos para navegación móvil y galería si hacen falta.
+- `specs/home-y-plano/preview/` — preview HTML autónomo y capturas del resultado final, respaldados en el repo.
+- Script de exportación del preview si hace falta; sin agregar dependencias.
 
 ## Technical Details
 
@@ -40,7 +42,19 @@ Verificar fotoscargadas, rutas y WhatsApp, desktop1440/móvil390 sin overflow y 
 
 ## Acceptance Criteria
 
-- [ ] Home terminada y visualmente distinta, fotos reales generadas integradas.
-- [ ] Cifras/copy coherentes proyecto actual y sin datosinventados comerciales.
-- [ ] Navegación, /plano y WhatsApp funcionan.
-- [ ] Desktop/móvil verificados y build/typecheck con resultados informados.
+- [x] Home terminada y visualmente distinta, fotos reales generadas integradas.
+- [x] Cifras/copy coherentes proyecto actual y sin datosinventados comerciales.
+- [x] Navegación, /plano y WhatsApp funcionan.
+- [x] Desktop/móvil verificados y build/typecheck con resultados informados.
+
+## Ampliación del usuario: entorno, accesos y puntos de interés
+
+El usuario añadió esta sección antes de cerrar la revisión. Ampliar la sección actual de ubicación, manteniendo las siete fotos y el plano interior. Leer `../entorno-fuentes.md`. Incorporar un mapa geográfico real de Google Maps con la ubicación ya utilizada por el repo (no usar una ilustración generada como cartografía exacta), acceso externo claro y listas editoriales de accesos y referencias regionales. Cambiar el label del header a Entorno si encaja, conservando #ubicacion.
+
+Accesos: frente RP58; empalme regional RP58/Autopista Presidente Perón; conexiones regionales RP205/RN205/Autopista Ezeiza-Cañuelas. No afirmar acceso de autopista directo al lote. Puntos de interés de categorías distintas: Plaza Canning, Toscas Shopping, Canning Health Institute, Universidad Provincial de Ezeiza y Terralagos. Descripciones sobrias y ciudad/dirección verificada; enlaces a Maps y/o sitios oficiales. Evitar tiempos de viaje, distancias, tráfico, demanda garantizada o proximidad inmediata no medida. Es un directorio del corredor Canning/Ezeiza, no una promesa de cercanía peatonal.
+
+La sección debe conservar el diseño editorial y funcionar en móvil. iframe geográfico lazy, title accesible, ratio estable, botón externo disponible; no nuevas dependencias ni más generaciones de imágenes. Si Google Maps no puede cargar en el preview sin red, mantener el bloque legible y su enlace externo; la home, fotos y plano de unidades siguen embebidos. Registrar esta limitación en README del preview sin agregar avisos técnicos innecesarios al producto.
+
+Rebuild y repetir checks de la sección nueva, navegación/links, imágenes y mapa de unidades. Regenerar HTML/capturas/verification.json desde la versión final, y mantener las fuentes en documento local para revisión. No commits ni push.
+
+Nueva precisión del usuario: foco residencial en countries, barrios y accesos. Priorizar San Lucas, Santa Rita, Saint Thomas Centro, Terralagos y La Providencia con fuentes en entorno-fuentes.md. Los cuatro POIs no residenciales quedan como complemento. Incluir links de recorrido desde cada country hacia el paseo resueltos por Maps, sin tiempos o distancias inventados. No cifras de familias, residentes ni demanda comercial.

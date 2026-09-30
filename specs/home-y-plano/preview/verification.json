@@ -1,0 +1,194 @@
+{
+  "source": "Final Next.js production build, including residential countries and access expansion; standalone export via export-preview.mjs",
+  "viewports": {
+    "desktop": [
+      1440,
+      900
+    ],
+    "mobile": [
+      390,
+      844
+    ]
+  },
+  "checks": {
+    "typecheck": "PASS after final build",
+    "build": "PASS with NEXT_TURBOPACK_EXPERIMENTAL_USE_SYSTEM_TLS_CERTS=1 and NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt",
+    "scopedESLint": "PASS, zero warnings",
+    "globalLint": "BLOCKED by existing missing react plugin for react/jsx-no-target-blank",
+    "productionBrowser": {
+      "desktopOverflow": false,
+      "mobileOverflow": false,
+      "imageCount": 8,
+      "errors": [],
+      "mapWarnings": [
+        "net::ERR_CERT_AUTHORITY_INVALID"
+      ],
+      "map": {
+        "src": "https://www.google.com/maps?q=-34.945948,-58.469175&z=12&output=embed",
+        "title": "Ubicación geográfica de La Palmerina sobre Ruta Provincial 58, Canning",
+        "loading": "lazy",
+        "width": 1278.75,
+        "height": 465
+      },
+      "routes": [
+        {
+          "label": "Ver recorrido al paseo ↗",
+          "aria": "Ver recorrido de San Lucas al paseo",
+          "href": "https://www.google.com/maps/dir/?api=1&origin=Barrio%20San%20Lucas%20Ruta%2058%20km%2016%20San%20Vicente%20Buenos%20Aires&destination=-34.945948,-58.469175&travelmode=driving",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "label": "Ver recorrido al paseo ↗",
+          "aria": "Ver recorrido de Santa Rita al paseo",
+          "href": "https://www.google.com/maps/dir/?api=1&origin=Barrio%20Santa%20Rita%20Ruta%2058%20km%2015.5%20San%20Vicente%20Buenos%20Aires&destination=-34.945948,-58.469175&travelmode=driving",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "label": "Ver recorrido al paseo ↗",
+          "aria": "Ver recorrido de Saint Thomas Centro al paseo",
+          "href": "https://www.google.com/maps/dir/?api=1&origin=Saint%20Thomas%20Centro%20Ruta%20Provincial%2058%20km%205%20Canning%20Buenos%20Aires&destination=-34.945948,-58.469175&travelmode=driving",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "label": "Ver recorrido al paseo ↗",
+          "aria": "Ver recorrido de Terralagos al paseo",
+          "href": "https://www.google.com/maps/dir/?api=1&origin=Terralagos%20Canning%20Ezeiza%20Buenos%20Aires&destination=-34.945948,-58.469175&travelmode=driving",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        },
+        {
+          "label": "Ver recorrido al paseo ↗",
+          "aria": "Ver recorrido de La Providencia Country Club al paseo",
+          "href": "https://www.google.com/maps/dir/?api=1&origin=La%20Providencia%20Country%20Club%20Ruta%2052%20km%209.5%20Canning%20Ezeiza%20Buenos%20Aires&destination=-34.945948,-58.469175&travelmode=driving",
+          "target": "_blank",
+          "rel": "noopener noreferrer"
+        }
+      ],
+      "menuEscape": "PASS",
+      "menuEntornoTap": "PASS",
+      "unitPlanSearchFicha": "PASS",
+      "alquiler": "PASS",
+      "whatsapp": "PASS"
+    },
+    "standaloneBrowser": {
+      "output": "/workspace/scratch/b79912c66fd2/palmerina-comercial/specs/home-y-plano/preview/index.html",
+      "bytes": 4368546,
+      "facts": {
+        "imageCount": 8,
+        "loaded": true,
+        "overflow": false
+      },
+      "errors": [],
+      "externalMapWarnings": [
+        "https://www.google.com/maps?q=-34.945948,-58.469175&z=12&output=embed: net::ERR_CERT_AUTHORITY_INVALID"
+      ],
+      "mapEmbedUnavailable": true,
+      "environmentLinks": [
+        {
+          "name": "Abrir ubicación en Google Maps ↗",
+          "href": "https://maps.app.goo.gl/eFMCSVcEKGdA7qoN9"
+        },
+        {
+          "name": "San Lucas ↗",
+          "href": "https://inversionesalcosto.com.ar/nuestros-barrios/san-lucas/"
+        },
+        {
+          "name": "Ver recorrido al paseo ↗",
+          "href": "https://www.google.com/maps/dir/?api=1&origin=Barrio%20San%20Lucas%20Ruta%2058%20km%2016%20San%20Vicente%20Buenos%20Aires&destination=-34.945948,-58.469175&travelmode=driving"
+        },
+        {
+          "name": "Santa Rita ↗",
+          "href": "https://inversionesalcosto.com.ar/nuestros-barrios/santa-rita/"
+        },
+        {
+          "name": "Ver recorrido al paseo ↗",
+          "href": "https://www.google.com/maps/dir/?api=1&origin=Barrio%20Santa%20Rita%20Ruta%2058%20km%2015.5%20San%20Vicente%20Buenos%20Aires&destination=-34.945948,-58.469175&travelmode=driving"
+        },
+        {
+          "name": "Saint Thomas Centro ↗",
+          "href": "https://www.saintthomasbp.com.ar/contacto.php"
+        },
+        {
+          "name": "Ver recorrido al paseo ↗",
+          "href": "https://www.google.com/maps/dir/?api=1&origin=Saint%20Thomas%20Centro%20Ruta%20Provincial%2058%20km%205%20Canning%20Buenos%20Aires&destination=-34.945948,-58.469175&travelmode=driving"
+        },
+        {
+          "name": "Terralagos ↗",
+          "href": "https://www.terralagos.com.ar/ubicacion.php"
+        },
+        {
+          "name": "Ver recorrido al paseo ↗",
+          "href": "https://www.google.com/maps/dir/?api=1&origin=Terralagos%20Canning%20Ezeiza%20Buenos%20Aires&destination=-34.945948,-58.469175&travelmode=driving"
+        },
+        {
+          "name": "La Providencia Country Club ↗",
+          "href": "https://www.laprovidenciacountryclub.com/como-llegar/"
+        },
+        {
+          "name": "Ver recorrido al paseo ↗",
+          "href": "https://www.google.com/maps/dir/?api=1&origin=La%20Providencia%20Country%20Club%20Ruta%2052%20km%209.5%20Canning%20Ezeiza%20Buenos%20Aires&destination=-34.945948,-58.469175&travelmode=driving"
+        },
+        {
+          "name": "Plaza Canning ↗",
+          "href": "https://www.plazacanning.com.ar/"
+        },
+        {
+          "name": "Maps ↗",
+          "href": "https://www.google.com/maps/search/?api=1&query=Plaza%20Canning%20Mariano%20Castex%201277%20Canning%20Ezeiza"
+        },
+        {
+          "name": "Toscas Shopping ↗",
+          "href": "https://toscasshopping.com.ar/"
+        },
+        {
+          "name": "Maps ↗",
+          "href": "https://www.google.com/maps/search/?api=1&query=Toscas%20Shopping%20Formosa%20653%20Canning%20Ezeiza"
+        },
+        {
+          "name": "Canning Health Institute ↗",
+          "href": "https://clinicamg.com.ar/canninghealthinstitute/"
+        },
+        {
+          "name": "Maps ↗",
+          "href": "https://www.google.com/maps/search/?api=1&query=Canning%20Health%20Institute%20Mariano%20Castex%201078%20Canning"
+        },
+        {
+          "name": "Universidad Provincial de Ezeiza ↗",
+          "href": "https://web.upe.edu.ar/contacto/"
+        },
+        {
+          "name": "Maps ↗",
+          "href": "https://www.google.com/maps/search/?api=1&query=Universidad%20Provincial%20de%20Ezeiza%20Alfonsina%20Storni%2041%20Ezeiza"
+        }
+      ]
+    }
+  },
+  "geographicMap": {
+    "providerHttp": "HTTP 200 verified by root with valid TLS certificates",
+    "chromium": "net::ERR_CERT_AUTHORITY_INVALID in this QA browser",
+    "production": "Real Google iframe retained with lazy/title/stable ratio; existing external Maps link available",
+    "standalone": "Exporter detected the browser certificate failure and removed only the geographic iframe from the preview clone; readable project-location text and external Maps button remain"
+  },
+  "notes": [
+    "NEXT_PUBLIC_APP_URL is absent locally: Next.js emits metadataBase localhost fallback warning. Layout uses existing NEXT_PUBLIC_APP_URL when supplied; no public domain invented.",
+    "Standalone preview includes home and unit plan. Rental links state that /alquiler is available in the Next.js site; 3D maqueta is not included.",
+    "Five residential routes use specific verified origins, destination -34.945948,-58.469175 and driving travelmode. No travel times or distances are assumed."
+  ],
+  "sha256": {
+    "src/app/page.tsx": "ac3ff0333a60677bded43e2030033a6927edc0a20c702d16b4db29a5a413753f",
+    "src/app/layout.tsx": "ca2a86a2d5bed046621c0d732b056c144ab35b309704276062e6a75cc262aa65",
+    "src/app/home.module.css": "ec29b3f2502f8d255e6b1d6bbc24bed2358ff1e18c0aca26c369b45d78eb9364",
+    "src/components/home/HomeHeader.tsx": "115beba861bcac0509ad4d1ce0c167a593c32e17bd858ecf4d2c82352ba9e94a",
+    "plano-comercial/plano.html": "1b3446de931f9aeb026e4370ba8a547d31fec9068139325c016685a396a2570c",
+    "public/images/proyecto-v2/manifest.json": "c7c78a80f9bc4987dcbd770e499db49e8e121d5611bd0069a17c4817a4492e88",
+    "specs/home-y-plano/entorno-fuentes.md": "10d4f73262445946230623b422d629d9065cfdecb42647b948d324a16aabf45b"
+  },
+  "preview": {
+    "path": "specs/home-y-plano/preview/index.html",
+    "bytes": 4368546,
+    "sha256": "769277f800094af0ca305a0500da2adee9176e16e3f937e5c4e43ab3f0b89d95"
+  }
+}

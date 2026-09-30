@@ -9,6 +9,8 @@ El usuario pidió siete fotos adicionales como las imágenes generadas que aprob
 - Siete imágenes distintas y coherentes: aérea diurna, acceso RP58, galería nocturna, café del frente, paseo diurno, oficinas/pasarela y restaurante.
 - Home con identidad del paseo, imágenes grandes, lectura clara y CTA al plano y al contacto existente.
 - Plano disponible en /plano, búsqueda, filtros simples, zoom y fichas cómodas en móvil.
+- Sección de entorno, accesos y puntos de interés, solicitada después por el usuario el 29/09 a las 23:33. Reutilizar la ubicación del proyecto y referencias regionales verificadas.
+- Foco residencial solicitado después: destacar countries y barrios, con recorridos al paseo y accesos regionales claros; servicios complementarios en segundo plano.
 
 ## Non-Goals
 
@@ -19,14 +21,15 @@ El usuario pidió siete fotos adicionales como las imágenes generadas que aprob
 
 ## Acceptance Criteria
 
-- [ ] Siete fotos nuevas completas y guardadas como assets del proyecto.
-- [ ] Home presenta el proyecto de parcela100×180m,18.000m² y37unidades proyectadas en2plantas; no las cifras antiguas de1.000m frente y18ha.
-- [ ] Todas las fotos nuevas aparecen en la home, con tamaños estables, carga diferida donde corresponde y textos alternativos.
-- [ ] Enlaces visibles al plano desde navegación, hero y sección dedicada; ruta /plano funciona.
-- [ ] Plano conserva datos U y coordenadas, con advertencia breve de datos ilustrativos.
-- [ ] Búsqueda, plantas, filtros, zoom/ajustar, selección y fichas funcionan con teclado y móvil390px sin desbordamiento.
-- [ ] Home funciona en escritorio/móvil; imágenes cargan, enlaces funcionan y no hay errores de consola.
-- [ ] Typecheck y build ejecutados; lint y cualquier bloqueo previo informados honestamente.
+- [x] Siete fotos nuevas completas y guardadas como assets del proyecto.
+- [x] Home presenta el proyecto de parcela100×180m,18.000m² y37unidades proyectadas en2plantas; no las cifras antiguas de1.000m frente y18ha.
+- [x] Todas las fotos nuevas aparecen en la home, con tamaños estables, carga diferida donde corresponde y textos alternativos.
+- [x] Enlaces visibles al plano desde navegación, hero y sección dedicada; ruta /plano funciona.
+- [x] Plano conserva datos U y coordenadas, con advertencia breve de datos ilustrativos.
+- [x] Búsqueda, plantas, filtros, zoom/ajustar, selección y fichas funcionan con teclado y móvil390px sin desbordamiento.
+- [x] Home funciona en escritorio/móvil; imágenes cargan, enlaces funcionan y no hay errores propios de consola.
+- [x] Entorno destaca cinco countries, tres accesos y cuatro servicios, con fuentes y recorridos verificados.
+- [x] Typecheck y build ejecutados; lint y cualquier bloqueo previo informados honestamente.
 
 ## Technical Constraints
 

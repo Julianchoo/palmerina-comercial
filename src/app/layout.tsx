@@ -18,27 +18,28 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
+  ...(process.env.NEXT_PUBLIC_APP_URL
+    ? { metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL) }
+    : {}),
   title: {
-    default: "La Palmerina – Tierra Comercial Canning",
+    default: "Paseo La Palmerina · Canning",
     template: "%s | La Palmerina",
   },
   description:
-    "1000m de frente sobre Ruta Provincial 58, Canning. Tierra comercial premium con acceso directo a la nueva Autopista Presidente Perón.",
+    "Paseo comercial proyectado sobre Ruta Provincial 58, Canning. Una parcela de 100 × 180 m, 18.000 m² y 37 unidades proyectadas en dos plantas, con locales, gastronomía y oficinas.",
   keywords: [
-    "tierra comercial canning",
-    "lote ruta 58",
-    "inversión inmobiliaria",
-    "desarrollo comercial",
-    "La Palmerina",
-    "autopista presidente perón",
+    "Paseo La Palmerina",
+    "paseo comercial Canning",
+    "locales Ruta 58",
+    "oficinas Canning",
   ],
   openGraph: {
     type: "website",
     locale: "es_AR",
-    siteName: "La Palmerina",
-    title: "La Palmerina – Tierra Comercial Canning",
+    siteName: "Paseo La Palmerina",
+    title: "Paseo La Palmerina · Canning",
     description:
-      "1000m de frente sobre Ruta Provincial 58, Canning. Tierra comercial premium.",
+      "Comercio, gastronomía y oficinas en un paseo proyectado sobre Ruta Provincial 58, Canning.",
   },
   robots: { index: true, follow: true },
 };
@@ -50,7 +51,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${inter.variable} ${roboto.variable}`}>
-      <body className="antialiased min-h-screen overflow-x-hidden" style={{ fontFamily: "var(--font-roboto), system-ui, sans-serif" }}>
+      <body
+        className="min-h-screen overflow-x-hidden antialiased"
+        style={{ fontFamily: "var(--font-roboto), system-ui, sans-serif" }}
+      >
         {children}
         <WhatsAppFloat />
       </body>
