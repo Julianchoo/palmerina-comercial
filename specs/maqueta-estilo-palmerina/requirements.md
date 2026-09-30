@@ -20,13 +20,13 @@ El usuario pidió llevar el estilo de las fotos anteriores al proyecto nuevo y a
 
 ## Acceptance Criteria
 
-- [ ] Parcela de 100 × 180 m; STRIPS, ANCHORS, CORES y alturas mantienen sus valores.
-- [ ] Las seis cámaras y tres modos funcionan; exportar PNG y redimensionar siguen funcionando.
-- [ ] Interiores tienen al menos mobiliario y luminarias tridimensionales visibles, sin tapar la circulación.
-- [ ] Hay vegetación estratificada y árboles menos geométricos en los lugares existentes.
-- [ ] Luces nocturnas iluminan superficies reales, con emisión y bloom controlados.
-- [ ] Tres JPG nuevos salen directamente de la maqueta y se entregan junto con una comparación visual.
-- [ ] No hay errores de consola; se informa rendimiento observado y cualquier limitación.
+- [x] Parcela de 100 × 180 m; STRIPS, ANCHORS, CORES y alturas mantienen sus valores.
+- [x] Las seis cámaras y tres modos funcionan; exportar PNG y redimensionar siguen funcionando.
+- [x] Interiores tienen al menos mobiliario y luminarias tridimensionales visibles, sin tapar la circulación.
+- [x] Hay vegetación estratificada y árboles menos geométricos en los lugares existentes.
+- [x] Luces nocturnas iluminan superficies reales, con emisión y bloom controlados.
+- [x] Tres JPG nuevos salen directamente de la maqueta y se entregan junto con una comparación visual.
+- [x] No hay errores de consola; se informa rendimiento observado y cualquier limitación.
 
 ## Assumptions
 

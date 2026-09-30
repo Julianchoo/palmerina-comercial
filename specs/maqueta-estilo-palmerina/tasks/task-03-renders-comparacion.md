@@ -2,7 +2,7 @@
 
 ## Status
 
-pending
+complete
 
 ## Wave
 
@@ -43,3 +43,7 @@ Generar imágenes desde el modelo mejorado para comprobar que el estilo se trasl
 - [ ] Comparación visual contra originales a igual cámara.
 - [ ] Sin errores de consola, modos/cámaras/descarga funcionales.
 - [ ] Resultado y limitaciones descritos fielmente; lint/typecheck reportados.
+
+## Completion notes
+
+Tres renders finales y tres originales3158 con mismas cámaras a1920×1080 SS2. Índice HTML autónomo con imágenes incorporadas verificado desktop/móvil. Script admite vistas válidas y RENDER_OUT, cleanup garantizado. Runtime PASS18 combinaciones, resize y descarga PNG, consola sin errores. Review integración PASS; typecheck/sintaxis/diff pasan. Lint falla por configuración previa could not find plugin react en react/jsx-no-target-blank.

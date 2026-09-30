@@ -32,7 +32,7 @@ Las tareas son secuenciales porque las dos primeras modifican el mismo HTML.
 - [x] [task-02-vegetacion-luces](./tasks/task-02-vegetacion-luces.md)
 
 ### Wave 3
-- [ ] [task-03-renders-comparacion](./tasks/task-03-renders-comparacion.md)
+- [x] [task-03-renders-comparacion](./tasks/task-03-renders-comparacion.md)
 
 ## Resultado para revisar
 
