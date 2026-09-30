@@ -11,20 +11,20 @@
   --bg:#f6f4ef; --surface:#ffffff; --surface-2:#f1ede4; --ink:#16213e; --ink-2:#4b5563; --muted:#8a8f98;
   --line:#e2ddd2; --primary:#1a5f7a; --primary-2:#2d8caa; --deep:#0f3d4f; --gold:#d4a574; --gold-2:#b8915f;
   --plot:#fbfaf6; --green:#dfe8d6; --green-2:#c9d9ba; --road:#6f7470; --road-2:#8a8f8a; --walk:#e6d6b3; --park:#e4e2dc; --stall:#b4b2aa;
-  --st-disp:#2f9e6e; --st-res:#e0a526; --st-vend:#c2544a; --st-alq:#5a6fd6;
+  --dim:#a4552b; --st-disp:#2f9e6e; --st-res:#e0a526; --st-vend:#c2544a; --st-alq:#5a6fd6;
   --t-kiosco:#d4a574; --t-pad:#b8915f; --t-200:#7fb8cc; --t-400:#2d8caa; --t-600:#1a5f7a; --t-ancla:#0f3d4f;
   --shadow:0 1px 2px rgba(16,24,40,.06),0 4px 16px rgba(16,24,40,.06);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#10141f; --surface:#171d2b; --surface-2:#1e2536; --ink:#eef1f6; --ink-2:#b6bdca; --muted:#7f8797;
+    --dim:#f0b47e; --bg:#10141f; --surface:#171d2b; --surface-2:#1e2536; --ink:#eef1f6; --ink-2:#b6bdca; --muted:#7f8797;
     --line:#2a3246; --plot:#1a2130; --green:#233327; --green-2:#2c4131; --road:#3c4250; --road-2:#4a5160; --walk:#4a4232; --park:#222a38; --stall:#3a4254;
     --t-200:#8cc6da; --t-400:#3ba3c4; --t-600:#2a7f9e; --t-ancla:#6fa3b8;
     --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#10141f; --surface:#171d2b; --surface-2:#1e2536; --ink:#eef1f6; --ink-2:#b6bdca; --muted:#7f8797;
+  --dim:#f0b47e; --bg:#10141f; --surface:#171d2b; --surface-2:#1e2536; --ink:#eef1f6; --ink-2:#b6bdca; --muted:#7f8797;
   --line:#2a3246; --plot:#1a2130; --green:#233327; --green-2:#2c4131; --road:#3c4250; --road-2:#4a5160; --walk:#4a4232; --park:#222a38; --stall:#3a4254;
   --t-200:#8cc6da; --t-400:#3ba3c4; --t-600:#2a7f9e; --t-ancla:#6fa3b8;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.25);
@@ -72,6 +72,11 @@ h1{margin:2px 0 0;font-size:26px;letter-spacing:-.01em}
 .unit .uid{font-weight:700;font-size:2.6px}
 .unit .um2{font-size:1.9px;opacity:.9}
 .lbl{font-family:Inter,sans-serif;fill:var(--ink-2);text-anchor:middle;dominant-baseline:middle}
+.dims{pointer-events:none}
+.dims line,.dims path{stroke:var(--dim);stroke-width:.18;fill:none}
+.dims .ext{stroke-width:.12;stroke-dasharray:.6 .5;opacity:.8}
+.dims text{font-family:Inter,sans-serif;fill:var(--dim);font-weight:600;text-anchor:middle;dominant-baseline:middle;paint-order:stroke;stroke:var(--plot);stroke-width:.45;stroke-linejoin:round}
+.dims.off{display:none}
 .lbl-w{font-family:Inter,sans-serif;fill:#fff;text-anchor:middle;dominant-baseline:middle;font-weight:600;letter-spacing:.1px}
 /* side panel */
 .panel{padding:16px;position:sticky;top:12px}
@@ -142,11 +147,12 @@ tfoot td{font-weight:700;border-bottom:0}
       </div>
     </div>
     <div><span class="tb-label">Mostrar</span><span class="chips" id="stateChips"></span></div>
+    <div><span class="tb-label">Mensuras</span><span class="chips" id="dimChips"></span></div>
   </div>
 
   <div class="main">
     <div class="card plan-card">
-      <div class="plan-scroll"><svg id="plan" viewBox="-16 -6 202 112" role="img" aria-label="Plano de implantación de La Palmerina"></svg></div>
+      <div class="plan-scroll"><svg id="plan" viewBox="-16 -12 206 120" role="img" aria-label="Plano de implantación de La Palmerina"></svg></div>
       <div class="legend" id="legend"></div>
     </div>
     <aside class="card panel" id="panel" aria-live="polite"></aside>
@@ -293,7 +299,7 @@ function drawSite(){
   el("path",{d:"M 150 104 H 170",stroke:"var(--ink-2)","stroke-width":.35},g);
   el("path",{d:"M 150 103 V 105 M 160 103.4 V 104.6 M 170 103 V 105",stroke:"var(--ink-2)","stroke-width":.3},g);
   el("text",{x:160,y:102.2,class:"lbl","font-size":1.6},g).textContent="20 m";
-  el("text",{x:90,y:-2.8,class:"lbl","font-size":1.8},g).textContent="PARCELA 100 × 180 m · 18.000 m²";
+  el("text",{x:90,y:-10.4,class:"lbl","font-size":1.8},g).textContent="PARCELA 100 × 180 m · 18.000 m²";
   return plazas;
 }
 const PLAZAS = drawSite();
@@ -311,6 +317,65 @@ U.forEach(u=>{
   g.addEventListener("mouseleave",hideTip);
   unitEls[u.id]=g;
 });
+
+/* ---------- Mensuras (capas toggleables) ---------- */
+const m=n=>n.toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const DIM_LAYERS={parcela:"Parcela",circ:"Circulaciones",unid:"Unidades"};
+const dimG={};
+for(const k in DIM_LAYERS) dimG[k]=el("g",{class:"dims"},svg);
+function tick(g,x,y){el("path",{d:`M ${x-.5} ${y+.5} L ${x+.5} ${y-.5}`},g);}
+// Cota horizontal (x1→x2 a la altura y); side = -1 texto arriba, 1 texto abajo
+function dimH(g,x1,x2,y,{fs=1.5,side=-1,label=m(x2-x1),ext=null}={}){
+  el("line",{x1,y1:y,x2,y2:y},g); tick(g,x1,y); tick(g,x2,y);
+  if(ext!=null) for(const x of [x1,x2]) el("line",{class:"ext",x1:x,y1:ext,x2:x,y2:y+(y<ext?-.6:.6)},g);
+  if(x2-x1>=fs*1.6) el("text",{x:(x1+x2)/2,y:y+side*fs*.75,"font-size":fs},g).textContent=label;
+}
+// Cota vertical (y1→y2 en x); side = -1 texto a la izquierda, 1 a la derecha
+function dimV(g,x,y1,y2,{fs=1.5,side=-1,label=m(y2-y1),ext=null}={}){
+  el("line",{x1:x,y1,x2:x,y2},g); tick(g,x,y1); tick(g,x,y2);
+  if(ext!=null) for(const y of [y1,y2]) el("line",{class:"ext",x1:ext,y1:y,x2:x+(x<ext?-.6:.6),y2:y},g);
+  if(y2-y1>=fs*1.6){const tx=x+side*fs*.75,ty=(y1+y2)/2;
+    el("text",{x:tx,y:ty,"font-size":fs,transform:`rotate(-90 ${tx} ${ty})`},g).textContent=label;}
+}
+function chainH(g,xs,y,o){for(let i=0;i<xs.length-1;i++)dimH(g,xs[i],xs[i+1],y,o);}
+function chainV(g,ys,x,o){for(let i=0;i<ys.length-1;i++)dimV(g,x,ys[i],ys[i+1],o);}
+// Parcela: totales + cadenas de sectores
+(()=>{const g=dimG.parcela;
+  dimH(g,0,180,-7.2,{fs:1.8,label:"180,00 m",ext:0});
+  chainH(g,[0,16,136,144,176,180],-3.2,{fs:1.4});
+  dimV(g,186,0,100,{fs:1.8,side:1,label:"100,00 m",ext:180});
+  chainV(g,[0,2,47,53,78,98,100],182.4,{fs:1.3,side:1});
+})();
+// Circulaciones: corte transversal por el cruce central + detalle de cochera
+(()=>{const g=dimG.circ, x=79;
+  chainV(g,[18,20,28,33,40,45,55,60,67,72,80,82],x,{fs:1.25,side:1});
+  dimH(g,16,20,24,{fs:1.1,side:-1});                     // circulación lateral
+  dimH(g,120,122.5,26.8,{fs:1.1,side:-1,label:"2,50"});  // ancho de cochera
+  dimV(g,123.8,28,33,{fs:1.1,side:1,label:"5,00"});       // largo de cochera
+  dimH(g,0,16,57.5,{fs:1.2,side:1,label:"Plaza 16,00"});
+  dimV(g,-2,45,55,{fs:1.2,side:-1,label:"Acceso 10,00"});
+})();
+// Unidades: frente × fondo de cada local
+U.forEach(u=>{const g=dimG.unid;
+  if(u.tipo==="kiosco"){dimH(g,u.x,u.x+u.w,u.y-1.1,{fs:1.1});dimV(g,u.x-1.1,u.y,u.y+u.h,{fs:1.1});return;}
+  const top=u.y<50, hy=top?u.y+1.4:u.y+u.h-1.4;
+  dimH(g,u.x,u.x+u.w,hy,{fs:1.2,side:top?1:-1});
+  if(u.tipo==="pad") dimV(g,u.x-1.1,u.y,u.y+u.h,{fs:1.1});
+  else dimV(g,u.x+1.3,u.y,u.y+u.h,{fs:1.2,side:1});
+});
+const dimOn=new Set(Object.keys(DIM_LAYERS));
+$("#dimChips").innerHTML=Object.entries(DIM_LAYERS).map(([k,l])=>`<button type="button" class="chip" data-d="${k}" aria-pressed="true"><span class="dot" style="background:var(--dim)"></span>${l}</button>`).join("")
+  +`<button type="button" class="chip" id="dimAll" aria-pressed="true">Todas</button>`;
+function syncDims(){
+  for(const k in DIM_LAYERS){dimG[k].classList.toggle("off",!dimOn.has(k));
+    $(`#dimChips [data-d="${k}"]`).setAttribute("aria-pressed",dimOn.has(k));}
+  const all=dimOn.size===Object.keys(DIM_LAYERS).length;
+  $("#dimAll").setAttribute("aria-pressed",all); $("#dimAll").textContent=all?"Ocultar todas":"Mostrar todas";
+}
+$("#dimChips").querySelectorAll("[data-d]").forEach(c=>c.onclick=()=>{const k=c.dataset.d;dimOn.has(k)?dimOn.delete(k):dimOn.add(k);syncDims();});
+$("#dimAll").onclick=()=>{const all=dimOn.size===Object.keys(DIM_LAYERS).length;
+  dimOn.clear(); if(!all)Object.keys(DIM_LAYERS).forEach(k=>dimOn.add(k)); syncDims();};
+syncDims();
 
 /* ---------- Color ---------- */
 const vRange=[Math.min(...U.map(u=>u.vta)),Math.max(...U.map(u=>u.vta))];
