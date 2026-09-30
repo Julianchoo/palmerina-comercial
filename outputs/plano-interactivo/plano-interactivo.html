@@ -38,11 +38,16 @@ header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:spac
 h1{margin:2px 0 0;font-size:26px;letter-spacing:-.01em}
 .sub{color:var(--ink-2);margin-top:2px}
 .theme-btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer;font:inherit;font-size:12px}
-.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;margin-bottom:14px}
 .kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
 .kpi .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-.kpi .v{font-size:19px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi .v{font-size:18px;white-space:nowrap;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
 .kpi .s{font-size:11px;color:var(--ink-2)}
+.kpi.norm{grid-column:span 2}
+.norm-row{display:flex;justify-content:space-between;font-size:11.5px;margin-top:5px;font-variant-numeric:tabular-nums}
+.norm-row b{font-weight:600}
+.norm-bar{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden;margin-top:2px}
+.norm-bar i{display:block;height:100%;border-radius:3px}
 .toolbar{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:10px}
 .seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
 .seg button{border:0;background:transparent;color:var(--ink-2);font:inherit;font-size:12.5px;padding:6px 10px;border-radius:7px;cursor:pointer}
@@ -120,6 +125,7 @@ tbody tr.sel{background:color-mix(in srgb,var(--gold) 18%,var(--surface))}
 tbody tr.dim{opacity:.35}
 tfoot td{font-weight:700;border-bottom:0}
 .note{font-size:11.5px;color:var(--muted);margin-top:12px}
+@media (max-width:1280px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.main{grid-template-columns:minmax(0,1fr)}.panel{position:static}}
 @media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}h1{font-size:21px}.kpi .v{font-size:16px}}
 </style>
@@ -224,6 +230,13 @@ U.forEach(u=>{
   u.altura = ALTURA[u.tipo];
 });
 const GLA = U.reduce((s,u)=>s+u.m2,0);
+/* Indicadores urbanísticos */
+const PARCELA_M2 = 18000;
+const FOS_MAX = 0.6, FOT_MAX = 1.2;
+const GALERIAS_M2 = 2*112.5*2;   // veredas cubiertas frente a las tiras
+const PLANTAS = 1;
+const HUELLA = GLA + GALERIAS_M2; // cubierto computable; decks de expansión son descubiertos
+const FOS = HUELLA/PARCELA_M2, FOT = HUELLA*PLANTAS/PARCELA_M2;
 
 /* ---------- Helpers ---------- */
 const fmt = n=>n.toLocaleString("es-AR",{maximumFractionDigits:0});
@@ -470,13 +483,20 @@ function renderKPIs(){
   const disp=U.filter(u=>u.estado==="disp");
   const k=[
     ["Unidades",U.length,`${disp.length} disponibles`],
-    ["Superficie cubierta",fmt(GLA)+" m²",`FOS ${pct(GLA/18000)}`],
-    ["Valor total de venta",usdK(tot),`${usd(Math.round(tot/GLA))}/m² prom.`],
-    ["Renta potencial",usd(alq)+"/mes",`${usd(Math.round(alq/GLA*10)/10)}/m² prom.`],
+    ["Superficie cubierta",fmt(GLA)+" m²",`+ ${fmt(GALERIAS_M2)} m² galerías`],
+    ["Valor de venta",usdK(tot),`${usd(Math.round(tot/GLA))}/m² prom.`],
+    ["Renta potencial",usdK(alq),`por mes · ${usd(Math.round(alq/GLA*10)/10)}/m² prom.`],
     ["Rentabilidad bruta",pct(alq*12/tot),"promedio ponderado"],
     ["Cocheras",PLAZAS+4,`${(((PLAZAS+4)/GLA)*100).toLocaleString("es-AR",{maximumFractionDigits:1})} c/100 m²`]
   ];
-  $("#kpis").innerHTML=k.map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("");
+  const n2=v=>v.toLocaleString("es-AR",{minimumFractionDigits:2,maximumFractionDigits:2});
+  const row=(lbl,v,max)=>{const r=v/max, c=r>1?"var(--st-vend)":r>.9?"var(--st-res)":"var(--st-disp)";
+    return `<div class="norm-row"><span>${lbl} <b>${n2(v)}</b> / ${n2(max)}</span><span style="color:${c}">${r>1?"Excede":pct(r)+" usado"}</span></div>
+      <div class="norm-bar"><i style="width:${Math.min(r,1)*100}%;background:${c}"></i></div>`;};
+  $("#kpis").innerHTML=k.map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s}</div></div>`).join("")
+    +`<div class="kpi norm" title="Computa locales + galerías cubiertas (${fmt(HUELLA)} m²). Decks de expansión descubiertos no computan.">
+        <div class="l">Normativa</div>${row("FOS",FOS,FOS_MAX)}${row("FOT",FOT,FOT_MAX)}
+        <div class="s" style="margin-top:5px">Remanente: ${fmt(FOS_MAX*PARCELA_M2-HUELLA)} m² de huella · ${fmt(FOT_MAX*PARCELA_M2-HUELLA*PLANTAS)} m² construibles</div></div>`;
 }
 
 /* ---------- Tabla ---------- */
