@@ -2,7 +2,7 @@
 
 ## Status
 
-pending
+complete
 
 ## Wave
 
@@ -40,3 +40,7 @@ Aplicar al modelo de La Palmerina el paisaje y la luz cálida de las fotos anter
 - [ ] Las circulaciones y cocheras permanecen libres.
 - [ ] Los tres modos tienen exposición equilibrada.
 - [ ] Modelo navegable sin errores y rendimiento medido antes/después.
+
+## Completion notes
+
+Copas suaves, vegetación estratificada con seed separado, mesas/sillas instanciadas y diez luces cálidas reales sin sombras, apagadas de día. Review PASS: circulación, huellas y consumo de RNG preservados. Sintaxis/typecheck pasan, lint bloqueo previo. Benchmark SwiftShader ruidoso: día escritorio/móvil +16–17%, noche escritorio +26%, móvil noche comparable. No equivale a hardware real.

@@ -147,6 +147,12 @@ const INT_SHOP = new THREE.MeshBasicMaterial({map:interiorTex("shop")});
 const INT_OFF  = new THREE.MeshBasicMaterial({map:interiorTex("office")});
 const glowMats = [];   // materiales emisivos que cambian con la luz
 function glow(color){const m=new THREE.MeshBasicMaterial({color});m.userData.base=new THREE.Color(color);glowMats.push(m);return m;}
+// Un presupuesto fijo de 10 luces sin sombras: iluminan muros, mesas y follaje reales.
+const warmLights=[];
+function warmLight(x,y,z,power,reach){
+  const light=new THREE.PointLight(0xffbd80,0,reach,2);
+  light.position.set(x,y,z); light.userData.power=power; warmLights.push(light); scene.add(light);
+}
 const LAMP = glow(0xffe2b0), STRING = glow(0xffc978), DOWN = glow(0xfff0d0);
 /* Charcos de luz sobre el piso: invisibles de día, suben al atardecer y de noche */
 const poolTex=(()=>{const [c,x]=canvas(128,128),g=x.createRadialGradient(64,64,0,64,64,64);
@@ -422,8 +428,24 @@ flushFurnishings();
   for(let z=4.5;z<97;z+=5) pool(140,z,3.6,3,0xffb865,.6);
   // mesas y bancos
   const tb=[]; for(let z=6;z<96;z+=3.2) if(rnd()<.8) tb.push([R(137.8,142.2),z]);
-  tb.forEach(([x,z])=>{box(M.wood,x-.45,x+.45,.72,.78,z-.45,z+.45);box(M.steel,x-.05,x+.05,0,.72,z-.05,z+.05,{cast:false});
-    box(M.steel,x-.9,x-.6,0,.45,z-.3,z+.3,{cast:false});box(M.steel,x+.6,x+.9,0,.45,z-.3,z+.3,{cast:false});});
+  // Mobiliario de café: patas finas, asientos y respaldos, sin nuevos sorteos de rnd().
+  const wood=[],metal=[];
+  const part=(batch,x,y,z,w,h,d)=>{o.position.set(x,y,z);o.scale.set(w,h,d);o.rotation.set(0,0,0);o.updateMatrix();batch.push(o.matrix.clone());};
+  tb.forEach(([x,z])=>{
+    part(wood,x,.76,z,.9,.06,.9); part(metal,x,.37,z,.07,.74,.07); part(metal,x,.035,z,.55,.05,.55);
+    for(const dir of [-1,1]){const cx=x+dir*.78;
+      part(wood,cx,.46,z,.43,.045,.46); part(wood,cx+dir*.2,.72,z,.045,.38,.46);
+      for(const dx of [-.16,.16])for(const dz of [-.17,.17])part(metal,cx+dx,.23,z+dz,.025,.46,.025);
+      for(const dz of [-.17,.17])part(metal,cx+dir*.18,.64,z+dz,.025,.4,.025);
+    }
+  });
+  for(const [mat,batch] of [[M.wood,wood],[M.steel,metal]]){
+    const im=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),mat,batch.length);
+    batch.forEach((m,i)=>im.setMatrixAt(i,m)); im.castShadow=true;im.receiveShadow=true;scene.add(im);
+  }
+  for(const z of [18,42,66,90])warmLight(140,3.6,z,62,15);
+  for(const [x,z] of [[47,20.5],[94,20.5],[47,79.5],[94,79.5]])warmLight(x,3.2,z,90,18);
+  warmLight(145.2,3.4,34,90,18);warmLight(145.2,3.4,68,90,18);
 })();
 
 /* ---------- Árboles, luminarias y autos (instanciados) ---------- */
@@ -441,8 +463,14 @@ for(let i=0;i<1100;i++){let x,z;do{x=R(-200,380);z=R(-220,320);}while((x>-45&&x<
 (()=>{
   const n=trees.length, trunk=new THREE.InstancedMesh(new THREE.CylinderGeometry(.12,.2,3,6),new THREE.MeshStandardMaterial({color:0x4a3b2c,roughness:1}),n);
   const crownG=new THREE.IcosahedronGeometry(1,2); {const pa=crownG.attributes.position,v=new THREE.Vector3();
-    for(let i=0;i<pa.count;i++){v.fromBufferAttribute(pa,i);const k=1+.16*Math.sin(v.x*5.1+v.y*3.3)*Math.cos(v.z*4.7-v.y*2.1);pa.setXYZ(i,v.x*k,v.y*k*.9,v.z*k);} crownG.computeVertexNormals();}
-  const crown=new THREE.InstancedMesh(crownG,new THREE.MeshStandardMaterial({color:0xa0a0a0,roughness:1,flatShading:true,envMapIntensity:.2}),n*3);
+    for(let i=0;i<pa.count;i++){v.fromBufferAttribute(pa,i);const k=1+.16*Math.sin(v.x*5.1+v.y*3.3)*Math.cos(v.z*4.7-v.y*2.1);pa.setXYZ(i,v.x*k,v.y*k*.9,v.z*k);} crownG.computeVertexNormals();
+    // IcosahedronGeometry es no indexada: soldar normales por posición suaviza sus caras.
+    const normal=crownG.attributes.normal, sums=new Map();
+    for(let i=0;i<pa.count;i++){const key=[pa.getX(i),pa.getY(i),pa.getZ(i)].map(v=>v.toFixed(5)).join(',');
+      if(!sums.has(key))sums.set(key,new THREE.Vector3()); sums.get(key).add(new THREE.Vector3().fromBufferAttribute(normal,i));}
+    for(let i=0;i<pa.count;i++){const key=[pa.getX(i),pa.getY(i),pa.getZ(i)].map(v=>v.toFixed(5)).join(',');const n=sums.get(key).normalize();normal.setXYZ(i,n.x,n.y,n.z);}
+  }
+  const crown=new THREE.InstancedMesh(crownG,new THREE.MeshStandardMaterial({color:0xa0a0a0,roughness:1,flatShading:false,envMapIntensity:.12}),n*3);
   const o=new THREE.Object3D(), col=new THREE.Color(); let ci=0;
   trees.forEach(([x,z,s],i)=>{o.position.set(x,1.5*s,z);o.scale.set(s,s,s);o.rotation.set(0,0,0);o.updateMatrix();trunk.setMatrixAt(i,o.matrix);
     for(let k=0;k<3;k++){o.position.set(x+R(-.9,.9)*s,(3.3+k*.8)*s,z+R(-.9,.9)*s);const cs=s*R(1.3,1.9)*(k===2?.75:1);o.scale.set(cs,cs*R(.8,1),cs);o.rotation.set(R(0,3),R(0,3),0);o.updateMatrix();
@@ -491,6 +519,57 @@ for(let i=0;i<1100;i++){let x,z;do{x=R(-200,380);z=R(-220,320);}while((x>-45&&x<
   im.castShadow=true; scene.add(im);
 })();
 
+/* Paisaje adicional con seed propio: jamás modifica autos, árboles o personas existentes. */
+(()=>{
+  let landscapeSeed=27183;
+  const rand=()=>((landscapeSeed=landscapeSeed*16807%2147483647)/2147483647);
+  const range=(a,b)=>a+(b-a)*rand(), o=new THREE.Object3D(), color=new THREE.Color();
+  const bushes=[],blades=[],branches=[],leaves=[],pots=[];
+  const transform=(x,y,z,sx,sy,sz,rx=0,ry=0,rz=0)=>{
+    o.position.set(x,y,z);o.scale.set(sx,sy,sz);o.rotation.set(rx,ry,rz);o.updateMatrix();return o.matrix.clone();};
+  const planting=(x,z,w,d)=>{
+    for(let i=0;i<7;i++){
+      const px=x+range(-w*.33,w*.33),pz=z+range(-d*.36,d*.36),h=range(.18,.38);
+      bushes.push(transform(px,.18+h*.5,pz,range(.3,.55),h,range(.22,.4)));
+      for(let j=0;j<8;j++)blades.push(transform(px+range(-.18,.18),.18+range(.22,.38),pz+range(-.18,.18),.035,range(.4,.75),.035,range(-.28,.28),range(0,6.3),range(-.25,.25)));
+    }
+  };
+  // Sólo los canteros ya reservados en el estacionamiento (sin invadir cocheras).
+  for(const key of plantersSkip){const [x,z]=key.split(',').map(Number);planting(x+1.25,z+2.5,2.1,4.5);}
+  // Macetas de 60 cm pegadas a postes existentes, dejando el centro de pérgola libre.
+  for(const z of [12,32,52,72,92])for(const x of [136.4,143.6]){
+    pots.push(transform(x,.3,z,.64,.6,.64));planting(x,z,.5,.5);
+  }
+  // Más ramaje y lóbulos pequeños sólo en árboles de la parcela; entorno sigue ligero.
+  trees.filter(([x,z])=>x>=0&&x<=180&&z>=0&&z<=100).forEach(([x,z,s])=>{
+    for(let j=0;j<3;j++){
+      const a=j*Math.PI*2/3+range(-.3,.3),dx=Math.cos(a),dz=Math.sin(a);
+      branches.push(transform(x+dx*.36*s,2.6*s,z+dz*.36*s,.07*s,1.7*s,.07*s,dz*.45,0,-dx*.45));
+      leaves.push(transform(x+dx*1.15*s,3.5*s,z+dz*1.15*s,.8*s,.65*s,.85*s,range(0,.8),a));
+    }
+  });
+  const foliage=new THREE.MeshStandardMaterial({color:0x76836a,roughness:1,envMapIntensity:.12});
+  const grass=new THREE.MeshStandardMaterial({color:0x828254,roughness:1});
+  const terracotta=new THREE.MeshStandardMaterial({color:0x514638,roughness:.96});
+  const bushGeometry=new THREE.SphereGeometry(1,10,7),positions=bushGeometry.attributes.position;
+  for(let i=0;i<positions.count;i++){
+    const x=positions.getX(i),y=positions.getY(i),z=positions.getZ(i);
+    const k=.93+.08*Math.sin(x*7+y*3)*Math.cos(z*6-y*4);
+    positions.setXYZ(i,x*k,y*k,z*k);
+  }
+  bushGeometry.computeVertexNormals();
+  for(const [geometry,material,matrices,vary] of [
+    [bushGeometry,foliage,bushes,true],
+    [new THREE.BoxGeometry(1,1,1),grass,blades,false],
+    [new THREE.CylinderGeometry(1,1,1,6),new THREE.MeshStandardMaterial({color:0x4a3b2c,roughness:1}),branches,false],
+    [new THREE.SphereGeometry(1,12,8),foliage,leaves,true],
+    [new THREE.CylinderGeometry(.5,.4,1,12),terracotta,pots,false]]){
+    const mesh=new THREE.InstancedMesh(geometry,material,matrices.length);
+    matrices.forEach((m,i)=>{mesh.setMatrixAt(i,m);if(vary)mesh.setColorAt(i,color.setHSL(range(.21,.27),range(.12,.24),range(.34,.46)));});
+    mesh.castShadow=matrices!==blades;mesh.receiveShadow=true;scene.add(mesh);
+  }
+})();
+
 /* ---------- Cielo, luces y modos ---------- */
 const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{top:{value:new THREE.Color()},hor:{value:new THREE.Color()},bot:{value:new THREE.Color()},sunDir:{value:new THREE.Vector3(0,1,0)},sunC:{value:new THREE.Color()}},
   vertexShader:"varying vec3 vP;void main(){vP=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
@@ -512,9 +591,9 @@ const bloom=new UnrealBloomPass(new THREE.Vector2(W,H),0,.5,.85); composer.addPa
 composer.addPass(new OutputPass());
 
 const MODES={
-  dia:{label:"Día",sun:[-.55,1,.75],sunC:0xfff1dc,sunI:3.2,hemi:[0xc4dcf2,0x6b6048,1.1],sky:[0x3f7cc6,0xd6e6f4,0x9aa58a],fog:0xd6e6f4,exp:1.0,interior:.42,glow:.35,env:.9,bloom:[0,.4,.9],pools:0,skySun:.25},
-  tarde:{label:"Atardecer",sun:[-1,.22,-.35],sunC:0xffa35c,sunI:2.6,hemi:[0x8d7fb4,0x3a2e2a,.7],sky:[0x243363,0xf2a26d,0x3a3136],fog:0xc98a70,exp:.95,interior:1.25,glow:1.4,env:.45,bloom:[.55,.5,.72],pools:.45,skySun:1},
-  noche:{label:"Noche",sun:[.35,1,.6],sunC:0x8ea6d8,sunI:.18,hemi:[0x2a3552,0x0b0c10,.22],sky:[0x05070f,0x1c2745,0x07080b],fog:0x121829,exp:1.05,interior:1.45,glow:2.2,env:.15,bloom:[.95,.55,.6],pools:.9,skySun:0}
+  dia:{label:"Día",sun:[-.55,1,.75],sunC:0xfff1dc,sunI:3.2,hemi:[0xc4dcf2,0x6b6048,1.1],sky:[0x3f7cc6,0xd6e6f4,0x9aa58a],fog:0xd6e6f4,exp:1.0,lights:0,interior:.42,glow:.35,env:.9,bloom:[0,.4,.9],pools:0,skySun:.25},
+  tarde:{label:"Atardecer",sun:[-1,.22,-.35],sunC:0xffa35c,sunI:2.6,hemi:[0x8d7fb4,0x3a2e2a,.7],sky:[0x243363,0xf2a26d,0x3a3136],fog:0xc98a70,exp:.95,lights:.65,interior:1.25,glow:1.4,env:.45,bloom:[.25,.45,.9],pools:.15,skySun:1},
+  noche:{label:"Noche",sun:[.35,1,.6],sunC:0x8ea6d8,sunI:.18,hemi:[0x2a3552,0x0b0c10,.22],sky:[0x05070f,0x1c2745,0x07080b],fog:0x121829,exp:1.05,lights:1,interior:1.45,glow:2.2,env:.15,bloom:[.35,.45,.9],pools:.22,skySun:0}
 };
 function setMode(k){
   const m=MODES[k]; mode=k;
@@ -526,6 +605,7 @@ function setMode(k){
   glowMats.forEach(g=>g.color.copy(g.userData.base).multiplyScalar(m.glow));
   [bloom.strength,bloom.radius,bloom.threshold]=m.bloom;
   pools.forEach(p=>p.opacity=m.pools*p.userData.k);
+  warmLights.forEach(light=>{light.intensity=light.userData.power*m.lights;light.visible=m.lights>0;});
   skyMat.uniforms.sunDir.value.set(...m.sun).normalize(); skyMat.uniforms.sunC.value.set(m.sunC).multiplyScalar(m.skySun);
   document.querySelectorAll("#modes button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===k));
 }
