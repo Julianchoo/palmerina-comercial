@@ -282,7 +282,7 @@ export default function HomePage() {
             <div className={styles.retailCopy}>
               <span className={styles.index}>01</span>
               <h3>
-                Comercio
+                Comercio{" "}
                 <br />a cielo abierto.
               </h3>
               <p>
