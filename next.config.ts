@@ -50,6 +50,12 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        // The public map is embedded only by our own /plano page.
+        // Keep DENY elsewhere; the final matching rule overrides this one header.
+        source: "/plano/:path*",
+        headers: [{ key: "X-Frame-Options", value: "SAMEORIGIN" }],
+      },
     ];
   },
 };

@@ -1,0 +1,172 @@
+{
+  "project": "Paseo La Palmerina",
+  "newImagesCount": 7,
+  "createdAt": "2026-09-30",
+  "generationMode": "builtin image_gen",
+  "notes": "Imágenes conceptuales fotorrealistas. Referencias esquemáticas utilizadas como guía geométrica, no como imágenes entregables. Originales conservados.",
+  "images": [
+    {
+      "filename": "01-aerea-dia.png",
+      "path": "/images/proyecto-v2/01-aerea-dia.png",
+      "relativePath": "public/images/proyecto-v2/01-aerea-dia.png",
+      "scene": "Aérea diurna",
+      "caption": "Una nueva escala para el paseo",
+      "alt": "Vista aérea diurna de La Palmerina con dos tiras de dos plantas, estacionamiento central y anclas al fondo.",
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape architectural marketing photograph for the Paseo La Palmerina website. Create ONE finished horizontal 16:9 image, a credible high-end architectural photograph, never a collage. Same NEW Paseo La Palmerina project on a 100 m road frontage by 180 m depth site, RP58 Buenos Aires suburban setting. Geometry invariants: exactly two long continuous parallel TWO-STOREY strips framing central parking; ground-floor retail and first-floor glazed offices accessed by a continuous 2 m wide EXTERNAL balcony with clear glass railing; exactly two rear anchor buildings joined by a ground-level transverse timber/black-steel pergola; exactly two detached single-storey front pads and two smaller kiosks at road frontage. No third floor, no extra project buildings, no padel courts, no independent repeated one-storey modules. Reference hierarchy: schematic geometry image(s) are authoritative ONLY for massing, heights and placement; approved photographic image(s) are authoritative for photoreal finish and material language. Replace ALL schematic trees, people, cars and glass with photographic reality. Materials: matte charcoal/black steel and vertical metal cladding, narrow warm brick accents at bays and ends as on the new model, transparent glazing with plausible reflection and visible rich interiors, warm 2700K interiors, real textured paving, lush realistic trees and grasses, tasteful varied cars and naturally behaving visitors. Restrained generic signage, no real confirmed brands, no labels/captions/watermarks. Clean verticals, natural scale, sophisticated editorial composition.\nSCENE 01: NEW oblique three-quarter drone aerial in clear late-morning daylight, same project's entire geometry recognizable. Road along foreground, two front pads and two kiosks, both long continuous two-storey wings, the central parking with planted islands and varied realistic cars, two rear anchors and transverse pergola. Distinct camera angle from the approved night hero, with rich daylight shadows, blue sky, realistic suburban tree canopy. Two storeys must visibly read on inward faces.",
+      "sourcePath": "/workspace/scratch/b79912c66fd2/generated_images/exec-81544588-d163-4c4f-b783-ecd9613e4632.png",
+      "references": [
+        "/workspace/scratch/b79912c66fd2/palmerina-comercial/plano-comercial/renders/tresc-dia.jpg",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-d1fefa8a-e64d-42fa-a492-f89122095ec4.png",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-3d436c74-6774-4cda-8d1a-99c3f6e300f4.png"
+      ],
+      "generated": true,
+      "tool": "builtin image_gen",
+      "conceptual": true,
+      "width": 1672,
+      "height": 941,
+      "bytes": 3439664
+    },
+    {
+      "filename": "02-acceso-ruta.png",
+      "path": "/images/proyecto-v2/02-acceso-ruta.png",
+      "relativePath": "public/images/proyecto-v2/02-acceso-ruta.png",
+      "scene": "Acceso desde RP58",
+      "caption": "El acceso sobre la RP58",
+      "alt": "Acceso peatonal y vehicular desde la RP58 en hora azul, con señal del paseo y fachadas iluminadas.",
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape architectural marketing photograph for the Paseo La Palmerina website. Create ONE finished horizontal 16:9 image, a credible high-end architectural photograph, never a collage. Same NEW Paseo La Palmerina project on a 100 m road frontage by 180 m depth site, RP58 Buenos Aires suburban setting. Geometry invariants: exactly two long continuous parallel TWO-STOREY strips framing central parking; ground-floor retail and first-floor glazed offices accessed by a continuous 2 m wide EXTERNAL balcony with clear glass railing; exactly two rear anchor buildings joined by a ground-level transverse timber/black-steel pergola; exactly two detached single-storey front pads and two smaller kiosks at road frontage. No third floor, no extra project buildings, no padel courts, no independent repeated one-storey modules. Reference hierarchy: schematic geometry image(s) are authoritative ONLY for massing, heights and placement; approved photographic image(s) are authoritative for photoreal finish and material language. Replace ALL schematic trees, people, cars and glass with photographic reality. Materials: matte charcoal/black steel and vertical metal cladding, narrow warm brick accents at bays and ends as on the new model, transparent glazing with plausible reflection and visible rich interiors, warm 2700K interiors, real textured paving, lush realistic trees and grasses, tasteful varied cars and naturally behaving visitors. Restrained generic signage, no real confirmed brands, no labels/captions/watermarks. Clean verticals, natural scale, sophisticated editorial composition.\nSCENE 02: human-eye-height exterior entrance photograph from across RP58 at blue hour after sunset, oblique angle looking through the central entrance. Foreground road and safe pedestrian crossing, dark refined project totem discreetly reading 'PASEO LA PALMERINA', front detached cafe pad and smaller kiosk, long two-storey strips visible beyond with warm interiors and balcony rail. Recognizable project entry matching the entrance geometry reference. Cars driving on road and a few arrivals on foot, realistic motion. No invented drive-through loop.",
+      "sourcePath": "/workspace/scratch/b79912c66fd2/generated_images/exec-3b2bc7ee-3623-4dda-a1c2-3ad97a3f6255.png",
+      "references": [
+        "/workspace/scratch/b79912c66fd2/palmerina-comercial/plano-comercial/renders/acceso-dia.jpg",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-d1fefa8a-e64d-42fa-a492-f89122095ec4.png",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-3d436c74-6774-4cda-8d1a-99c3f6e300f4.png"
+      ],
+      "generated": true,
+      "tool": "builtin image_gen",
+      "conceptual": true,
+      "width": 1672,
+      "height": 941,
+      "bytes": 2553272
+    },
+    {
+      "filename": "03-galeria-noche.png",
+      "path": "/images/proyecto-v2/03-galeria-noche.png",
+      "relativePath": "public/images/proyecto-v2/03-galeria-noche.png",
+      "scene": "Galería nocturna",
+      "caption": "La galería al caer la noche",
+      "alt": "Galería comercial nocturna con vidrieras cálidas y oficinas sobre una pasarela exterior de vidrio.",
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape architectural marketing photograph for the Paseo La Palmerina website. Create ONE finished horizontal 16:9 image, a credible high-end architectural photograph, never a collage. Same NEW Paseo La Palmerina project on a 100 m road frontage by 180 m depth site, RP58 Buenos Aires suburban setting. Geometry invariants: exactly two long continuous parallel TWO-STOREY strips framing central parking; ground-floor retail and first-floor glazed offices accessed by a continuous 2 m wide EXTERNAL balcony with clear glass railing; exactly two rear anchor buildings joined by a ground-level transverse timber/black-steel pergola; exactly two detached single-storey front pads and two smaller kiosks at road frontage. No third floor, no extra project buildings, no padel courts, no independent repeated one-storey modules. Reference hierarchy: schematic geometry image(s) are authoritative ONLY for massing, heights and placement; approved photographic image(s) are authoritative for photoreal finish and material language. Replace ALL schematic trees, people, cars and glass with photographic reality. Materials: matte charcoal/black steel and vertical metal cladding, narrow warm brick accents at bays and ends as on the new model, transparent glazing with plausible reflection and visible rich interiors, warm 2700K interiors, real textured paving, lush realistic trees and grasses, tasteful varied cars and naturally behaving visitors. Restrained generic signage, no real confirmed brands, no labels/captions/watermarks. Clean verticals, natural scale, sophisticated editorial composition.\nSCENE 03: human-eye-height night photograph along the covered ground-floor retail gallery of one long TWO-STOREY continuous strip, framing both shopfronts and upper office floor/external balcony overhead. Ground floor doors, clear glazing, warm restaurants and shops, few cafe tables and people walking. Parking and planted curb immediately to the right, cars beyond. Upper level visibly has glazed offices behind a glass-railed external balcony, never a loft/open blank cladding. Deep navy night sky, rich 2700K glow, controlled contrast and natural shadows. Similar material language to approved gallery but a distinct night camera position.",
+      "sourcePath": "/workspace/scratch/b79912c66fd2/generated_images/exec-13d92261-a11f-481b-9621-404742739f45.png",
+      "references": [
+        "/workspace/scratch/b79912c66fd2/palmerina-comercial/plano-comercial/renders/galeria-dia.jpg",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-3d436c74-6774-4cda-8d1a-99c3f6e300f4.png",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-d1fefa8a-e64d-42fa-a492-f89122095ec4.png"
+      ],
+      "generated": true,
+      "tool": "builtin image_gen",
+      "conceptual": true,
+      "width": 1672,
+      "height": 941,
+      "bytes": 2600454
+    },
+    {
+      "filename": "04-cafe-frente.png",
+      "path": "/images/proyecto-v2/04-cafe-frente.png",
+      "relativePath": "public/images/proyecto-v2/04-cafe-frente.png",
+      "scene": "Café del frente",
+      "caption": "Un café a la entrada",
+      "alt": "Café independiente de una planta al frente, con vidrio transparente, mesas exteriores y el paseo detrás.",
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape architectural marketing photograph for the Paseo La Palmerina website. Create ONE finished horizontal 16:9 image, a credible high-end architectural photograph, never a collage. Same NEW Paseo La Palmerina project on a 100 m road frontage by 180 m depth site, RP58 Buenos Aires suburban setting. Geometry invariants: exactly two long continuous parallel TWO-STOREY strips framing central parking; ground-floor retail and first-floor glazed offices accessed by a continuous 2 m wide EXTERNAL balcony with clear glass railing; exactly two rear anchor buildings joined by a ground-level transverse timber/black-steel pergola; exactly two detached single-storey front pads and two smaller kiosks at road frontage. No third floor, no extra project buildings, no padel courts, no independent repeated one-storey modules. Reference hierarchy: schematic geometry image(s) are authoritative ONLY for massing, heights and placement; approved photographic image(s) are authoritative for photoreal finish and material language. Replace ALL schematic trees, people, cars and glass with photographic reality. Materials: matte charcoal/black steel and vertical metal cladding, narrow warm brick accents at bays and ends as on the new model, transparent glazing with plausible reflection and visible rich interiors, warm 2700K interiors, real textured paving, lush realistic trees and grasses, tasteful varied cars and naturally behaving visitors. Restrained generic signage, no real confirmed brands, no labels/captions/watermarks. Clean verticals, natural scale, sophisticated editorial composition.\nSCENE 04: DAYLIGHT close three-quarter architectural lifestyle photograph of the detached front CAFE PAD. Precisely a modest single-storey 10 x 16 m pad about 5 m high, dark steel shallow roof, narrow brick accents and full-height transparent glass, warm richly furnished cafe interior, small outdoor terrace with coffee tables and visitors, natural landscaping. Main long TWO-STOREY strip glimpsed BEHIND it across planted foreground, establishing same project. Human scale, cafe is detached and one storey only. No drive-through lane, no grand additional wing, no fabricated atrium.",
+      "sourcePath": "/workspace/scratch/b79912c66fd2/generated_images/exec-275fb835-ea90-4edf-95f0-bc51e67d7517.png",
+      "references": [
+        "/workspace/scratch/b79912c66fd2/palmerina-comercial/plano-comercial/renders/acceso-dia.jpg",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-d1fefa8a-e64d-42fa-a492-f89122095ec4.png",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-3d436c74-6774-4cda-8d1a-99c3f6e300f4.png"
+      ],
+      "generated": true,
+      "tool": "builtin image_gen",
+      "conceptual": true,
+      "width": 1672,
+      "height": 941,
+      "bytes": 2870199
+    },
+    {
+      "filename": "05-paseo-dia.png",
+      "path": "/images/proyecto-v2/05-paseo-dia.png",
+      "relativePath": "public/images/proyecto-v2/05-paseo-dia.png",
+      "scene": "Paseo diurno",
+      "caption": "El paseo a plena luz",
+      "alt": "Paseo comercial diurno bajo una pérgola de madera y acero, con mesas, vidrieras y vegetación.",
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape architectural marketing photograph for the Paseo La Palmerina website. Create ONE finished horizontal 16:9 image, a credible high-end architectural photograph, never a collage. Same NEW Paseo La Palmerina project on a 100 m road frontage by 180 m depth site, RP58 Buenos Aires suburban setting. Geometry invariants: exactly two long continuous parallel TWO-STOREY strips framing central parking; ground-floor retail and first-floor glazed offices accessed by a continuous 2 m wide EXTERNAL balcony with clear glass railing; exactly two rear anchor buildings joined by a ground-level transverse timber/black-steel pergola; exactly two detached single-storey front pads and two smaller kiosks at road frontage. No third floor, no extra project buildings, no padel courts, no independent repeated one-storey modules. Reference hierarchy: schematic geometry image(s) are authoritative ONLY for massing, heights and placement; approved photographic image(s) are authoritative for photoreal finish and material language. Replace ALL schematic trees, people, cars and glass with photographic reality. Materials: matte charcoal/black steel and vertical metal cladding, narrow warm brick accents at bays and ends as on the new model, transparent glazing with plausible reflection and visible rich interiors, warm 2700K interiors, real textured paving, lush realistic trees and grasses, tasteful varied cars and naturally behaving visitors. Restrained generic signage, no real confirmed brands, no labels/captions/watermarks. Clean verticals, natural scale, sophisticated editorial composition.\nSCENE 05: bright DAYLIGHT eye-height photograph along the REAR TRANSVERSE PEDESTRIAN PERGOLA directly in front of the two anchor facades. Follow rear-paseo geometry reference: horizontal wood slats carried on slender black steel columns, glazed large rear anchor facades on one side, parking/planted curb on the other; a two-storey wing end visible at the end of perspective. Inviting small outdoor tables, people strolling and talking, clear shop interiors, real flowering grasses and leafy trees. Shadow pattern of pergola on paving, elegant open air atmosphere. This is the rear transverse paseo, not an invented corridor between one-storey pods.",
+      "sourcePath": "/workspace/scratch/b79912c66fd2/generated_images/exec-5ac16dab-2ae4-4b23-a822-5a04ae9ee7ee.png",
+      "references": [
+        "/workspace/scratch/b79912c66fd2/palmerina-comercial/plano-comercial/renders/paseo-tarde.jpg",
+        "/workspace/scratch/b79912c66fd2/palmerina-comercial/plano-comercial/renders/tresc-dia.jpg",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-3d436c74-6774-4cda-8d1a-99c3f6e300f4.png"
+      ],
+      "generated": true,
+      "tool": "builtin image_gen",
+      "conceptual": true,
+      "visualReviewNote": "La salida representa un paseo diurno con pérgola sobre la galería de dos plantas; no confirma la posición transversal frente a las anclas.",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2871930
+    },
+    {
+      "filename": "06-oficinas-pasarela.png",
+      "path": "/images/proyecto-v2/06-oficinas-pasarela.png",
+      "relativePath": "public/images/proyecto-v2/06-oficinas-pasarela.png",
+      "scene": "Oficinas y pasarela",
+      "caption": "Oficinas abiertas al paseo",
+      "alt": "Pasarela exterior de oficinas en planta alta, con baranda de vidrio y vista al estacionamiento central.",
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape architectural marketing photograph for the Paseo La Palmerina website. Create ONE finished horizontal 16:9 image, a credible high-end architectural photograph, never a collage. Same NEW Paseo La Palmerina project on a 100 m road frontage by 180 m depth site, RP58 Buenos Aires suburban setting. Geometry invariants: exactly two long continuous parallel TWO-STOREY strips framing central parking; ground-floor retail and first-floor glazed offices accessed by a continuous 2 m wide EXTERNAL balcony with clear glass railing; exactly two rear anchor buildings joined by a ground-level transverse timber/black-steel pergola; exactly two detached single-storey front pads and two smaller kiosks at road frontage. No third floor, no extra project buildings, no padel courts, no independent repeated one-storey modules. Reference hierarchy: schematic geometry image(s) are authoritative ONLY for massing, heights and placement; approved photographic image(s) are authoritative for photoreal finish and material language. Replace ALL schematic trees, people, cars and glass with photographic reality. Materials: matte charcoal/black steel and vertical metal cladding, narrow warm brick accents at bays and ends as on the new model, transparent glazing with plausible reflection and visible rich interiors, warm 2700K interiors, real textured paving, lush realistic trees and grasses, tasteful varied cars and naturally behaving visitors. Restrained generic signage, no real confirmed brands, no labels/captions/watermarks. Clean verticals, natural scale, sophisticated editorial composition.\nSCENE 06: camera at human eye height standing ON the continuous 2 m wide EXTERNAL OFFICE BALCONY of the first floor, balcony slab elevation approx 6.35 m above grade. Long perspective with transparent glazed furnished OFFICE entrances immediately on LEFT, narrow brick piers and charcoal metal; continuous CLEAR GLASS GUARDRAIL immediately on RIGHT, parking visibly far BELOW beyond railing and opposite two-storey wing across it. One or two professionals walking naturally on the balcony. Warm late afternoon sunlight, realistic office interiors with desks meeting rooms and plants, no retail on this level, no extra upper floor, no giant bridge or enclosed mall. Mandatory balcony camera placement: show balcony floor and railing at waist height; look DOWN to cars, not street-eye height.",
+      "sourcePath": "/workspace/scratch/b79912c66fd2/generated_images/exec-aa4df355-d436-41fd-a201-e9744eddfd1f.png",
+      "references": [
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-3d436c74-6774-4cda-8d1a-99c3f6e300f4.png",
+        "/workspace/scratch/b79912c66fd2/palmerina-comercial/plano-comercial/renders/pasarela-tarde.jpg",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-d1fefa8a-e64d-42fa-a492-f89122095ec4.png"
+      ],
+      "generated": true,
+      "tool": "builtin image_gen",
+      "conceptual": true,
+      "width": 1672,
+      "height": 941,
+      "bytes": 2525552
+    },
+    {
+      "filename": "07-restaurante.png",
+      "path": "/images/proyecto-v2/07-restaurante.png",
+      "relativePath": "public/images/proyecto-v2/07-restaurante.png",
+      "scene": "Restaurante",
+      "caption": "Gastronomía con calidez",
+      "alt": "Interior de restaurante en planta baja, con iluminación cálida y vistas a la galería exterior y al estacionamiento.",
+      "prompt": "Use case: photorealistic-natural. Asset type: landscape architectural marketing photograph for the Paseo La Palmerina website. Create ONE finished horizontal 16:9 image, a credible high-end architectural photograph, never a collage. Same NEW Paseo La Palmerina project on a 100 m road frontage by 180 m depth site, RP58 Buenos Aires suburban setting. Geometry invariants: exactly two long continuous parallel TWO-STOREY strips framing central parking; ground-floor retail and first-floor glazed offices accessed by a continuous 2 m wide EXTERNAL balcony with clear glass railing; exactly two rear anchor buildings joined by a ground-level transverse timber/black-steel pergola; exactly two detached single-storey front pads and two smaller kiosks at road frontage. No third floor, no extra project buildings, no padel courts, no independent repeated one-storey modules. Reference hierarchy: schematic geometry image(s) are authoritative ONLY for massing, heights and placement; approved photographic image(s) are authoritative for photoreal finish and material language. Replace ALL schematic trees, people, cars and glass with photographic reality. Materials: matte charcoal/black steel and vertical metal cladding, narrow warm brick accents at bays and ends as on the new model, transparent glazing with plausible reflection and visible rich interiors, warm 2700K interiors, real textured paving, lush realistic trees and grasses, tasteful varied cars and naturally behaving visitors. Restrained generic signage, no real confirmed brands, no labels/captions/watermarks. Clean verticals, natural scale, sophisticated editorial composition.\nSCENE 07: premium but believable intimate RESTAURANT INTERIOR in a ground-floor retail bay of the new continuous strip. Human-eye-level camera inside, looking diagonally past dressed wood tables, upholstered chairs, some diners and warm pendant lights toward large transparent black-steel framed windows. Through windows clearly see covered ground-level retail gallery, planted curb, central parking and partial opposite TWO-STOREY strip with glass office balcony. Single ground-floor restaurant room at realistic ceiling height within double-storey strip (offices above not internally visible); narrow brick accent wall, dark exposed steel ceiling, tasteful copper details, warmth 2700K. Evening ambience. No giant atrium, no mezzanine, no invented floors, no hotel lobby. Convincing fine-dining photographic detail.",
+      "sourcePath": "/workspace/scratch/b79912c66fd2/generated_images/exec-466a31a8-3025-462c-92de-728bbbfd7f1c.png",
+      "references": [
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-3d436c74-6774-4cda-8d1a-99c3f6e300f4.png",
+        "/workspace/scratch/b79912c66fd2/generated_images/exec-d1fefa8a-e64d-42fa-a492-f89122095ec4.png",
+        "/workspace/scratch/b79912c66fd2/palmerina-comercial/plano-comercial/renders/galeria-dia.jpg"
+      ],
+      "generated": true,
+      "tool": "builtin image_gen",
+      "conceptual": true,
+      "width": 1672,
+      "height": 941,
+      "bytes": 2471696
+    },
+    {
+      "filename": "hero-aerea-noche.png",
+      "path": "/images/proyecto-v2/hero-aerea-noche.png",
+      "relativePath": "public/images/proyecto-v2/hero-aerea-noche.png",
+      "scene": "Aérea nocturna aprobada",
+      "caption": "Paseo La Palmerina",
+      "alt": "Vista aérea nocturna del Paseo La Palmerina con estacionamiento central y fachadas cálidas.",
+      "prompt": null,
+      "sourcePath": "/workspace/scratch/b79912c66fd2/generated_images/exec-d1fefa8a-e64d-42fa-a492-f89122095ec4.png",
+      "generated": false,
+      "conceptual": true,
+      "width": 1672,
+      "height": 941,
+      "bytes": 2937819
+    }
+  ]
+}
