@@ -1,9 +1,12 @@
 {
   "name": "agentic-coding-starter-kit",
   "version": "1.1.2",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --webpack",
+    "build": "node --version && next build --webpack",
     "build:ci": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
