@@ -62,6 +62,16 @@
 }
 
 :root {
+  /* Shared editorial identity; status colors and UI semantics stay independent. */
+  --palmerina-cream: #f3efe5;
+  --palmerina-surface: #fffdf7;
+  --palmerina-ink: #181a17;
+  --palmerina-copper: #b58c63;
+  --palmerina-copper-dark: #805538;
+  --palmerina-muted: #64665e;
+  --palmerina-line: #d8d4c8;
+  --palmerina-header-height: 80px;
+  --palmerina-anchor-offset: 144px;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
@@ -242,3 +252,11 @@
     page-break-inside: avoid;
   }
 }
+
+@media (max-width: 1000px) {
+  :root {
+    --palmerina-header-height: 72px;
+    --palmerina-anchor-offset: 92px;
+  }
+}
+

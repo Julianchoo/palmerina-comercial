@@ -1,3 +1,5 @@
+import { SiteHeader } from "@/components/shared/SiteHeader";
+import styles from "./plano.module.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,12 +15,17 @@ export const metadata: Metadata = {
 
 export default function PlanoPage() {
   return (
-    <main style={{ height: "100dvh", minHeight: "480px", background: "#f4f0e8" }}>
-      <iframe
-        src="/plano/index.html"
-        title="Plano interactivo de La Palmerina: locales y oficinas"
-        style={{ display: "block", width: "100%", height: "100%", border: 0 }}
-      />
-    </main>
+    <>
+      <a href="#contenido-plano" className={styles.skipLink}>Ir al plano</a>
+      <SiteHeader />
+      <main id="contenido-plano" className={styles.workspace} tabIndex={-1}>
+        <iframe
+          src="/plano/index.html?embedded=1"
+          title="Plano interactivo de La Palmerina: locales y oficinas"
+          className={styles.frame}
+        />
+      </main>
+    </>
   );
 }
+

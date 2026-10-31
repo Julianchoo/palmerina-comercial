@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { HomeHeader } from "@/components/home/HomeHeader";
+import { SiteHeader } from "@/components/shared/SiteHeader";
 import { WHATSAPP_URL } from "@/lib/constants";
 import styles from "./home.module.css";
 import type { Metadata } from "next";
@@ -31,6 +31,13 @@ export const metadata: Metadata = {
 };
 
 // Project pin already used by the existing LocationSection; see entorno-fuentes.md.
+const sectionLinks = [
+  { href: "#proyecto", label: "El proyecto" },
+  { href: "#espacios", label: "Espacios" },
+  { href: "#ubicacion", label: "Entorno" },
+  { href: "#contacto", label: "Contacto" },
+];
+
 const PROJECT_MAP_URL = "https://maps.app.goo.gl/eFMCSVcEKGdA7qoN9";
 const regionalReferences = [
   {
@@ -158,8 +165,8 @@ export default function HomePage() {
       <a href="#contenido" className={styles.skipLink}>
         Ir al contenido
       </a>
-      <HomeHeader />
-      <main id="contenido">
+      <SiteHeader sectionLinks={sectionLinks} />
+      <main id="contenido" tabIndex={-1}>
         <section className={styles.hero} aria-labelledby="hero-title">
           <Image
             src="/images/proyecto-v2/hero-aerea-noche.png"
@@ -606,3 +613,4 @@ export default function HomePage() {
     </div>
   );
 }
+
