@@ -1,0 +1,97 @@
+.mapCard {
+  --ink: #233e33;
+  color: var(--ink);
+  min-width: 0;
+  background: #fffefa;
+  border: 1px solid #d9ded3;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 22px 24px 18px;
+}
+.eyebrow { margin: 0 0 7px; color: #657365; font-size: 10px; text-transform: uppercase; letter-spacing: .17em; font-weight: 600; }
+.topbar h2 { margin: 0; font: 400 26px/1.15 Georgia, serif; text-wrap: balance; }
+.controls { display: flex; align-items: center; gap: 5px; }
+.controls button, .selectionBar button {
+  min-width: 38px;
+  min-height: 38px;
+  padding: 6px 10px;
+  background: #f4f5ef;
+  border: 1px solid #d6ddcf;
+  border-radius: 7px;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color .15s, border-color .15s;
+}
+.controls .reset { font-size: 12px; padding-inline: 13px; margin-left: 5px; }
+.controls button:hover:not(:disabled), .selectionBar button:hover:not(:disabled) { background: #e5ecdf; border-color: #9bae98; }
+.controls button:disabled, .selectionBar button:disabled { opacity: .4; cursor: default; }
+.controls button:focus-visible, .selectionBar button:focus-visible, .selectionBar select:focus-visible { outline: 3px solid #30664d; outline-offset: 2px; }
+.zoom { font-size: 11px; min-width: 43px; text-align: center; font-variant-numeric: tabular-nums; }
+.selectionBar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 0 24px 18px; }
+.selectionBar label { font-size: 12px; font-weight: 500; }
+.selectionBar select {
+  flex: 1;
+  min-width: 0;
+  max-width: 310px;
+  padding: 10px 28px 10px 10px;
+  border: 1px solid #d6ddcf;
+  border-radius: 7px;
+  background-color: #fffefa;
+  color: #233e33;
+  font-size: 12px;
+  text-overflow: ellipsis;
+}
+.selectionBar button { min-height: 36px; font-size: 11px; }
+.canvas {
+  position: relative;
+  background: #e9ece3;
+  background-image: radial-gradient(#c3cbbc 0.65px, transparent 0.65px);
+  background-size: 12px 12px;
+  border-block: 1px solid #d6ddcf;
+  isolation: isolate;
+}
+.svg { display: block; width: 100%; height: clamp(430px, 68vh, 760px); touch-action: none; user-select: none; cursor: grab; }
+.svg:active { cursor: grabbing; }
+.svg:focus-visible { outline: 3px solid #30664d; outline-offset: -4px; }
+.parcel { cursor: pointer; transition: fill-opacity .12s, stroke-width .12s; }
+.parcel:hover { fill-opacity: .7; stroke-width: 2.5px; }
+.parcel:focus-visible { stroke: #102d23; stroke-width: 4px; fill-opacity: .6; outline: none; }
+.selected { stroke-linejoin: round; }
+.canvasCaption { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; align-items: center; max-width: calc(100% - 24px); padding: 9px 15px; background: #fffefaee; border: 1px solid #d4dcca; border-radius: 30px; box-shadow: 0 3px 12px #213a2a10; font-size: 11px; pointer-events: none; white-space: nowrap; }
+.canvasCaption strong { font-weight: 600; }
+.canvasCaption span { overflow: hidden; text-overflow: ellipsis; }
+.imageMessage { position: absolute; inset: 40% 20px auto; text-align: center; padding: 18px; font-size: 13px; line-height: 1.5; color: #445b4d; background: #fffefaee; border: 1px solid #d6ddcf; border-radius: 8px; pointer-events: none; z-index: 1; }
+.legend { display: flex; flex-wrap: wrap; gap: 13px 20px; padding: 18px 24px 10px; }
+.legend > span { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; color: #526255; }
+.legend i { font-style: normal; width: 19px; height: 19px; border: 1px solid currentColor; border-radius: 4px; display: grid; place-items: center; font-size: 11px; line-height: 1; }
+.available { color: #25805b; background: #25805b1c; }
+.unavailable { color: #6b7673; background: #7b85831c; border-style: dashed !important; }
+.reserved { color: #9a6512; background: repeating-linear-gradient(45deg, #b97b1522, #b97b1522 3px, transparent 3px, transparent 5px); }
+.sold { color: #ad504c; background: #ad504c22; }
+.instructions { margin: 0; padding: 4px 24px 20px; font-size: 11px; line-height: 1.7; color: #687467; max-width: 750px; }
+.empty { padding: 0 24px 16px; font-size: 13px; color: #526255; }
+@media (max-width: 640px) {
+  .topbar { padding: 18px 16px 15px; gap: 14px; }
+  .topbar h2 { font-size: 24px; }
+  .selectionBar { padding: 0 16px 15px; gap: 8px; }
+  .selectionBar label { width: 100%; }
+  .selectionBar select { max-width: none; }
+  .selectionBar button { padding-inline: 8px; }
+  .legend { padding-inline: 16px; gap: 12px; }
+  .instructions { padding-inline: 16px; }
+  .svg { height: 520px; max-height: 66vh; }
+  .canvasCaption { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .parcel, .controls button, .selectionBar button { transition: none; }
+}
