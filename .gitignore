@@ -46,3 +46,7 @@ next-env.d.ts
 public/uploads
 
 nul
+
+.private-st-thomas/
+
+specs/st-thomas-lotes/source-audit/
