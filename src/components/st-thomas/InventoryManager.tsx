@@ -46,6 +46,13 @@ export function InventoryManager({ initialInventory }: InventoryManagerProps) {
   const loadingRef = useRef(!initialInventory);
   const reloadController = useRef<AbortController | null>(null);
   const [editorKey, setEditorKey] = useState(0);
+  const editorRef = useRef<HTMLDivElement>(null);
+  const openEditor = useCallback(() => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.scrollIntoView({ behavior: "smooth", block: "start" });
+    editor.querySelector<HTMLInputElement>("input")?.focus({ preventScroll: true });
+  }, []);
 
   const markDirty = useCallback((value: boolean) => { dirtyRef.current = value; setDirty(value); }, []);
   const markBusy = useCallback((value: boolean) => { busyRef.current = value; setBusy(value); }, []);
@@ -193,13 +200,13 @@ export function InventoryManager({ initialInventory }: InventoryManagerProps) {
         <p className={styles.results} aria-live="polite">{visible.length} de {lots.length} lotes{dirty ? " · Hay cambios sin guardar en la ficha." : ""}</p>
         <div className={styles.workspace}>
           <div className={styles.mainView}>
-            {view === "map" ? <LotMap lots={visible} plan={inventory.plan} selectedId={selectedId} onSelect={select} imageUrl="/api/st-thomas/plan" /> : <section className={styles.tableCard} aria-label="Tabla de lotes">
+            {view === "map" ? <LotMap lots={visible} plan={inventory.plan} selectedId={selectedId} onSelect={select} onEdit={openEditor} imageUrl="/api/st-thomas/plan" /> : <section className={styles.tableCard} aria-label="Tabla de lotes">
               <div className={styles.sortControls}><label htmlFor={`${id}-sort`}>Ordenar por<select id={`${id}-sort`} value={sort} onChange={(event) => setSort(event.target.value as SortKey)}><option value="number">Número de lote</option><option value="street">Calle</option><option value="areaM2">Superficie</option><option value="priceUsd">Precio</option><option value="status">Estado</option></select></label><button type="button" onClick={() => setDescending(!descending)} aria-label={descending ? "Cambiar a orden ascendente" : "Cambiar a orden descendente"}>{descending ? "↓ Descendente" : "↑ Ascendente"}</button></div>
               <div className={styles.tableScroll}><table><caption className={styles.srOnly}>Lotes del inventario. Elegí un lote para consultar o editar su ficha.</caption><thead><tr><th scope="col">Lote</th><th scope="col">Calle</th><th scope="col" className={styles.numeric}>Superficie</th><th scope="col" className={styles.numeric}>Precio · USD</th><th scope="col">Estado</th><th scope="col"><span className={styles.srOnly}>Ver ficha</span></th></tr></thead><tbody>{visible.map((lot) => <tr key={lot.id} className={selectedId === lot.id ? styles.activeRow : undefined}><th scope="row"><button type="button" disabled={loading || busy} onClick={() => select(lot.id)} aria-label={`Ver ficha del lote ${lot.number}`}>{lot.number}</button></th><td>{lot.street}</td><td className={styles.numeric}>{area.format(lot.areaM2)} m²</td><td className={styles.numeric}>{lot.priceUsd === null ? "A definir" : money.format(lot.priceUsd)}</td><td><span className={`${styles.status} ${styles[lot.status]}`}>{STATUS_LABELS[lot.status]}</span></td><td><button type="button" disabled={loading || busy} onClick={() => select(lot.id)} aria-label={`Editar lote ${lot.number}`}>Ver ficha ↗</button></td></tr>)}</tbody></table></div>
               {!visible.length && <p className={styles.empty}>No hay lotes que coincidan con estos filtros.</p>}
             </section>}
           </div>
-          {selected ? <LotEditor key={`${selected.id}:${selected.version}:${editorKey}`} lot={selected} disabled={loading} onSaved={saved} onDirtyChange={markDirty} onBusyChange={markBusy} onReload={() => void reload()} /> : <aside className={`${styles.editor} ${styles.emptyEditor}`}><span aria-hidden="true">↗</span><h2>Elegí un lote</h2><p>Seleccioná una parcela del plano o una fila de la tabla para ver su precio, estado y datos.</p></aside>}
+          <div ref={editorRef} className={styles.editorSlot}>{selected ? <LotEditor key={`${selected.id}:${selected.version}:${editorKey}`} lot={selected} disabled={loading} onSaved={saved} onDirtyChange={markDirty} onBusyChange={markBusy} onReload={() => void reload()} /> : <aside className={`${styles.editor} ${styles.emptyEditor}`}><span aria-hidden="true">↗</span><h2>Elegí un lote</h2><p>Seleccioná una parcela del plano o una fila de la tabla para ver su precio, estado y datos.</p></aside>}</div>
         </div>
       </>}
     </div>

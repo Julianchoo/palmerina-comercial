@@ -12,17 +12,21 @@ export interface LotMapProps {
   onSelect: (id: string) => void;
   imageUrl?: string;
   className?: string;
+  /** Opens the editing panel for the selected lot (scrolls to it on small screens). */
+  onEdit?: () => void;
 }
 
 interface Viewport { x: number; y: number; width: number; height: number }
 interface PointerPosition { x: number; y: number }
+interface Hover { id: string; x: number; y: number }
 
-const STATUS: Record<LotStatus, { label: string; color: string; symbol: string }> = {
-  available: { label: "Disponible", color: "#25805b", symbol: "●" },
-  unavailable: { label: "No disponible", color: "#7b8583", symbol: "—" },
-  reserved: { label: "Reservado", color: "#b97b15", symbol: "◆" },
-  sold: { label: "Vendido", color: "#ad504c", symbol: "×" },
+const STATUS: Record<LotStatus, { label: string; color: string }> = {
+  available: { label: "Disponible", color: "#2f8a5f" },
+  unavailable: { label: "No disponible", color: "#8a9490" },
+  reserved: { label: "Reservado", color: "#c98a1e" },
+  sold: { label: "Vendido", color: "#b8524d" },
 };
+const FILL_OPACITY: Record<LotStatus, number> = { available: .5, unavailable: .22, reserved: .55, sold: .5 };
 const currency = new Intl.NumberFormat("es-AR", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 const area = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 2 });
 
@@ -32,7 +36,7 @@ function bounds(lot: Lot) {
   return { left: Math.min(...xs), top: Math.min(...ys), right: Math.max(...xs), bottom: Math.max(...ys) };
 }
 
-export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-thomas/plan", className }: LotMapProps) {
+export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-thomas/plan", className, onEdit }: LotMapProps) {
   const id = useId().replace(/:/g, "");
   const svg = useRef<SVGSVGElement>(null);
   const pointers = useRef(new Map<number, PointerPosition>());
@@ -42,6 +46,8 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
   const [viewport, setViewport] = useState<Viewport>(initial);
   const viewportRef = useRef<Viewport>(initial);
   const [imageState, setImageState] = useState<"loading" | "ready" | "error">("loading");
+  const [hover, setHover] = useState<Hover | null>(null);
+  const animation = useRef<number | null>(null);
   const selected = useMemo(() => lots.find((lot) => lot.id === selectedId), [lots, selectedId]);
   const selectedBounds = useMemo(() => selected ? bounds(selected) : null, [selected]);
 
@@ -58,9 +64,29 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
     setViewport(bounded);
   }, [plan.width, plan.height]);
 
+  const animateTo = useCallback((target: Viewport) => {
+    if (animation.current !== null) cancelAnimationFrame(animation.current);
+    const from = viewportRef.current;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { applyViewport(target); return; }
+    const start = performance.now();
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / 380);
+      const ease = 1 - Math.pow(1 - t, 3);
+      applyViewport({
+        x: from.x + (target.x - from.x) * ease,
+        y: from.y + (target.y - from.y) * ease,
+        width: from.width + (target.width - from.width) * ease,
+        height: from.height + (target.height - from.height) * ease,
+      });
+      animation.current = t < 1 ? requestAnimationFrame(step) : null;
+    };
+    animation.current = requestAnimationFrame(step);
+  }, [applyViewport]);
+  useEffect(() => () => { if (animation.current !== null) cancelAnimationFrame(animation.current); }, []);
+
   const reset = useCallback(() => {
-    applyViewport({ x: 0, y: 0, width: plan.width, height: plan.height });
-  }, [applyViewport, plan.width, plan.height]);
+    animateTo({ x: 0, y: 0, width: plan.width, height: plan.height });
+  }, [animateTo, plan.width, plan.height]);
 
   const toPlanPoint = useCallback((clientX: number, clientY: number) => {
     const element = svg.current;
@@ -92,12 +118,12 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
       (selectedBounds.bottom - selectedBounds.top) * 4 * plan.width / plan.height,
     ));
     const height = width * plan.height / plan.width;
-    applyViewport({
+    animateTo({
       width, height,
       x: (selectedBounds.left + selectedBounds.right - width) / 2,
       y: (selectedBounds.top + selectedBounds.bottom - height) / 2,
     });
-  }, [applyViewport, plan.width, plan.height, selectedBounds]);
+  }, [animateTo, plan.width, plan.height, selectedBounds]);
 
   useEffect(() => {
     if (!selectedId || mapSelection.current === selectedId) return;
@@ -127,6 +153,7 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
 
   function pointerDown(event: PointerEvent<SVGSVGElement>) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
+    if (animation.current !== null) { cancelAnimationFrame(animation.current); animation.current = null; }
     const current = pointers.current;
     if (!current.size) gesture.current = { moved: false, startX: event.clientX, startY: event.clientY };
     current.set(event.pointerId, { x: event.clientX, y: event.clientY });
@@ -134,10 +161,18 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
     event.currentTarget.setPointerCapture(event.pointerId);
   }
 
+  function trackHover(event: PointerEvent<SVGSVGElement>) {
+    if (event.pointerType !== "mouse") return;
+    const lotId = event.target instanceof Element ? event.target.closest("[data-lot-id]")?.getAttribute("data-lot-id") : null;
+    const box = event.currentTarget.getBoundingClientRect();
+    setHover(lotId ? { id: lotId, x: event.clientX - box.left, y: event.clientY - box.top } : null);
+  }
+
   function pointerMove(event: PointerEvent<SVGSVGElement>) {
     const current = pointers.current;
     const previous = current.get(event.pointerId);
-    if (!previous) return;
+    if (!previous) { trackHover(event); return; }
+    setHover(null);
     const next = { x: event.clientX, y: event.clientY };
     if (Math.hypot(next.x - gesture.current.startX, next.y - gesture.current.startY) > 5) gesture.current.moved = true;
     const other = [...current.entries()].find(([pointerId]) => pointerId !== event.pointerId)?.[1];
@@ -189,29 +224,23 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
   }
 
   const zoomPercent = Math.round(plan.width / viewport.width * 100);
+  const hovered = hover ? lots.find((lot) => lot.id === hover.id) : undefined;
+  const counts = useMemo(() => {
+    const result: Record<LotStatus, number> = { available: 0, unavailable: 0, reserved: 0, sold: 0 };
+    for (const lot of lots) result[lot.status] += 1;
+    return result;
+  }, [lots]);
+  const price = (lot: Lot) => lot.priceUsd === null ? "A definir" : currency.format(lot.priceUsd);
 
   return (
     <section className={`${styles.mapCard} ${className ?? ""}`} aria-labelledby={`${id}-heading`}>
       <div className={styles.topbar}>
-        <div>
-          <p className={styles.eyebrow}>Explorá el loteo</p>
-          <h2 id={`${id}-heading`}>Plano de St. Thomas</h2>
-        </div>
-        <div className={styles.controls} aria-label="Controles del plano">
-          <button type="button" onClick={() => zoom(1.3333)} disabled={zoomPercent <= 100} aria-label="Alejar plano">−</button>
-          <output className={styles.zoom} aria-label="Nivel de zoom">{zoomPercent}%</output>
-          <button type="button" onClick={() => zoom(.75)} disabled={zoomPercent >= 1800} aria-label="Acercar plano">+</button>
-          <button type="button" onClick={reset} className={styles.reset}>Ver todo</button>
-        </div>
-      </div>
-
-      <div className={styles.selectionBar}>
-        <label htmlFor={`${id}-lot`}>Ir al lote</label>
-        <select id={`${id}-lot`} value={selectedId ?? ""} onChange={(event) => { if (event.target.value) selectLot(event.target.value, false); }}>
-          <option value="">Elegí un lote…</option>
-          {lots.map((lot) => <option key={lot.id} value={lot.id}>Lote {lot.number} · {lot.street} · {STATUS[lot.status].label}</option>)}
-        </select>
-        <button type="button" disabled={!selected} onClick={focusSelection}>Centrar selección</button>
+        <h2 id={`${id}-heading`}>Plano</h2>
+        <ul className={styles.legend} aria-label="Estados de los lotes">
+          {(Object.keys(STATUS) as LotStatus[]).map((key) => (
+            <li key={key}><i style={{ background: STATUS[key].color }} aria-hidden="true" />{STATUS[key].label}<span>{counts[key]}</span></li>
+          ))}
+        </ul>
       </div>
 
       <div className={styles.canvas}>
@@ -230,37 +259,26 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
           onPointerDown={pointerDown}
           onPointerMove={pointerMove}
           onPointerUp={pointerUp}
+          onPointerLeave={() => setHover(null)}
           onPointerCancel={(event) => { pointers.current.delete(event.pointerId); gesture.current.moved = true; }}
           onLostPointerCapture={(event) => pointers.current.delete(event.pointerId)}
         >
           <title id={`${id}-title`}>Plano interactivo de St. Thomas, lotes y estado comercial</title>
-          <defs>
-            <pattern id={`${id}-reserved`} patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)">
-              <rect width="7" height="7" fill="#e9bd65" fillOpacity=".35" />
-              <path d="M 0 0 L 0 7" stroke="#996314" strokeOpacity=".6" strokeWidth="2" />
-            </pattern>
-            <pattern id={`${id}-sold`} patternUnits="userSpaceOnUse" width="8" height="8">
-              <rect width="8" height="8" fill="#d88d86" fillOpacity=".4" />
-              <path d="M 0 0 L 8 8 M 8 0 L 0 8" stroke="#9f4944" strokeOpacity=".5" strokeWidth=".8" />
-            </pattern>
-          </defs>
-          <image href={imageUrl} width={plan.width} height={plan.height} x="0" y="0" preserveAspectRatio="none" onLoad={() => setImageState("ready")} onError={() => setImageState("error")} aria-hidden="true" />
+          <image className={styles.plan} href={imageUrl} width={plan.width} height={plan.height} x="0" y="0" preserveAspectRatio="none" onLoad={() => setImageState("ready")} onError={() => setImageState("error")} aria-hidden="true" />
           {imageState === "ready" && lots.map((lot) => {
             const active = lot.id === selectedId;
             const status = STATUS[lot.status];
-            const fill = lot.status === "reserved" ? `url(#${id}-reserved)` : lot.status === "sold" ? `url(#${id}-sold)` : status.color;
             return (
               <polygon
                 key={lot.id}
                 data-lot-id={lot.id}
                 className={`${styles.parcel} ${active ? styles.selected : ""}`}
                 points={lot.polygon.map((point) => point.join(",")).join(" ")}
-                fill={fill}
-                fillOpacity={lot.status === "available" ? ".42" : lot.status === "unavailable" ? ".25" : "1"}
-                stroke={active ? "#122e26" : status.color}
-                strokeWidth={active ? "3" : "1"}
+                fill={status.color}
+                fillOpacity={active ? .85 : FILL_OPACITY[lot.status]}
+                stroke={active ? "#10261d" : "#fffefa"}
+                strokeWidth={active ? 2.5 : 1}
                 vectorEffect="non-scaling-stroke"
-                strokeDasharray={!active && lot.status === "unavailable" ? "3 2" : undefined}
                 role="button"
                 tabIndex={active || (!selectedId && lot.id === lots[0]?.id) ? 0 : -1}
                 aria-label={`Lote ${lot.number}, ${lot.street}, ${area.format(lot.areaM2)} metros cuadrados, ${lot.priceUsd === null ? "precio a definir" : currency.format(lot.priceUsd)}, ${status.label}`}
@@ -271,36 +289,42 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
                     selectLot(lot.id, false);
                   }
                 }}
-              >
-                <title>{`Lote ${lot.number} · ${status.label} · ${lot.priceUsd === null ? "A definir" : currency.format(lot.priceUsd)}`}</title>
-              </polygon>
+              />
             );
           })}
-          {imageState === "ready" && selected && selectedBounds && (
-            <text
-              x={(selectedBounds.left + selectedBounds.right) / 2}
-              y={selectedBounds.top - viewport.width / 100}
-              fontSize={viewport.width / 65}
-              textAnchor="middle"
-              fill="#122e26"
-              stroke="#fffefa"
-              strokeWidth={viewport.width / 250}
-              paintOrder="stroke"
-              fontWeight="600"
-              pointerEvents="none"
-              aria-hidden="true"
-            >Lote {selected.number}</text>
-          )}
         </svg>
-        <div className={styles.canvasCaption} aria-live="polite">
-          {selected ? <><strong>Lote {selected.number}</strong><span>{STATUS[selected.status].symbol} {STATUS[selected.status].label}</span></> : <span>Seleccioná un lote para ver su ficha</span>}
+
+        {hovered && hover && hovered.id !== selectedId && (
+          <div className={styles.tooltip} style={{ left: hover.x, top: hover.y }} aria-hidden="true">
+            <strong>Lote {hovered.number}</strong>
+            <span>{area.format(hovered.areaM2)} m² · {price(hovered)}</span>
+          </div>
+        )}
+
+        {selected && (
+          <div className={styles.detail} aria-live="polite">
+            <div className={styles.detailHead}>
+              <strong>Lote {selected.number}</strong>
+              <span className={styles.pill} style={{ color: STATUS[selected.status].color }}><i style={{ background: STATUS[selected.status].color }} />{STATUS[selected.status].label}</span>
+            </div>
+            <p className={styles.detailPrice}>{price(selected)}</p>
+            <p className={styles.detailMeta}>{area.format(selected.areaM2)} m² · {selected.street}</p>
+            <dl>
+              <div><dt>Superficie</dt><dd>{area.format(selected.areaM2)} m²</dd></div>
+              <div><dt>USD/m²</dt><dd>{selected.priceUsd === null ? "—" : currency.format(selected.priceUsd / selected.areaM2)}</dd></div>
+              <div><dt>Calle</dt><dd>{selected.street}</dd></div>
+            </dl>
+            {onEdit && <button type="button" onClick={onEdit} className={styles.editButton}>Editar</button>}
+          </div>
+        )}
+
+        <div className={styles.controls} aria-label="Controles del plano">
+          <button type="button" onClick={() => zoom(.7)} disabled={zoomPercent >= 1800} aria-label="Acercar">+</button>
+          <button type="button" onClick={() => zoom(1.4286)} disabled={zoomPercent <= 100} aria-label="Alejar">−</button>
+          <button type="button" onClick={reset} disabled={zoomPercent <= 100} aria-label="Ver todo el plano">⤢</button>
         </div>
       </div>
-
-      <div className={styles.legend} aria-label="Estados de los lotes">
-        {Object.entries(STATUS).map(([key, state]) => <span key={key}><i className={styles[key]} aria-hidden="true">{state.symbol}</i>{state.label}</span>)}
-      </div>
-      <p id={`${id}-instructions`} className={styles.instructions}>Arrastrá para recorrer el plano o usá dos dedos para acercar. Con teclado: flechas para desplazar, + y − para zoom, Inicio para ver todo. También podés elegir un lote en la lista.</p>
+      <p id={`${id}-instructions`} className={styles.srOnly}>Arrastrá para recorrer el plano, usá dos dedos o Ctrl más rueda para acercar. Con teclado: flechas para desplazar, + y − para zoom, Inicio para ver todo.</p>
       {!lots.length && <p className={styles.empty} role="status">No hay lotes para mostrar con los filtros actuales.</p>}
     </section>
   );
