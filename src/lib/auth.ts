@@ -41,7 +41,13 @@ function getAuthConfiguration() {
     ) {
       return null;
     }
-    return { baseURL: url.origin, secret };
+    // Also trust the deployment's own Vercel domains, so a mistyped BETTER_AUTH_URL
+    // cannot block sign-in on the production site.
+    const vercelHosts = [process.env.VERCEL_PROJECT_PRODUCTION_URL, process.env.VERCEL_BRANCH_URL, process.env.VERCEL_URL];
+    const trustedOrigins = [
+      ...new Set([url.origin, ...vercelHosts.filter((host): host is string => !!host).map((host) => `https://${host}`)]),
+    ];
+    return { baseURL: url.origin, secret, trustedOrigins };
   } catch {
     return null;
   }
@@ -56,7 +62,7 @@ function createAuth(configuration: NonNullable<ReturnType<typeof getAuthConfigur
     appName: "La Palmerina",
     baseURL: configuration.baseURL,
     secret: configuration.secret,
-    trustedOrigins: [configuration.baseURL],
+    trustedOrigins: configuration.trustedOrigins,
     database: drizzleAdapter(getDb(), { provider: "pg", schema }),
     // The administrator account is created with scripts/create-admin.ts; there is no public sign-up.
     emailAndPassword: { enabled: true, disableSignUp: true, minPasswordLength: 8 },
