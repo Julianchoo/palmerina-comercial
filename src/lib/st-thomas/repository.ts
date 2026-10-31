@@ -53,7 +53,7 @@ export async function readInventory(): Promise<InventoryResponse> {
         plan: { width: plan.width, height: plan.height, imageFile: "/api/st-thomas/plan" },
         sourceAudit: { statusesConfirmed: plan.statusesConfirmed, warnings: plan.warnings },
       };
-    }, { isolationLevel: "repeatable read", readOnly: true });
+    }, { isolationLevel: "repeatable read", accessMode: "read only" });
   } catch (error) {
     if (error instanceof InventoryError) throw error;
     throw new InventoryError(503, "No se pudo consultar el inventario. Volvé a intentarlo.");
