@@ -16,15 +16,11 @@ export function isAdminIdentity(email: string, emailVerified: boolean): boolean 
 function getAuthConfiguration() {
   const baseURL = process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL;
   const secret = process.env.BETTER_AUTH_SECRET;
-  const clientId = process.env.GOOGLE_CLIENT_ID;
-  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
   if (
     !baseURL ||
     !secret ||
     secret.length < 32 ||
-    !clientId ||
-    !clientSecret ||
     !(process.env.POSTGRES_URL || process.env.DATABASE_URL)
   ) {
     return null;
@@ -45,7 +41,7 @@ function getAuthConfiguration() {
     ) {
       return null;
     }
-    return { baseURL: url.origin, secret, clientId, clientSecret };
+    return { baseURL: url.origin, secret };
   } catch {
     return null;
   }
@@ -62,14 +58,8 @@ function createAuth(configuration: NonNullable<ReturnType<typeof getAuthConfigur
     secret: configuration.secret,
     trustedOrigins: [configuration.baseURL],
     database: drizzleAdapter(getDb(), { provider: "pg", schema }),
-    emailAndPassword: { enabled: false },
-    socialProviders: {
-      google: {
-        clientId: configuration.clientId,
-        clientSecret: configuration.clientSecret,
-        prompt: "select_account",
-      },
-    },
+    // The administrator account is created with scripts/create-admin.ts; there is no public sign-up.
+    emailAndPassword: { enabled: true, disableSignUp: true, minPasswordLength: 8 },
     account: { accountLinking: { enabled: false } },
     session: {
       expiresIn: 60 * 60 * 8,

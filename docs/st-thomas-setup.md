@@ -4,8 +4,8 @@ El código del sitio no contiene inventario, coordenadas de parcelas ni imágene
 
 ## Preparación
 
-1. Configurar la conexión privada `POSTGRES_URL` (o `DATABASE_URL`), `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` y las credenciales Google indicadas en `env.example`. Guardar valores reales en el entorno, nunca en el repositorio.
-2. Registrar en Google el callback `${BETTER_AUTH_URL}/api/auth/callback/google`. La cuenta autorizada se crea al completar su primer ingreso válido con email verificado. No existe registro público por contraseña.
+1. Configurar la conexión privada `POSTGRES_URL` (o `DATABASE_URL`), `BETTER_AUTH_SECRET` y `BETTER_AUTH_URL` indicadas en `env.example`. Guardar valores reales en el entorno, nunca en el repositorio.
+2. Crear la cuenta de administrador (email y contraseña; no existe registro público): `ADMIN_PASSWORD='…' node --env-file=.env.local --import tsx scripts/create-admin.ts`. Con `--reset-password` cambia la contraseña de una cuenta existente. El administrador también puede cambiarla desde `/st-thomas`.
 3. Ejecutar las migraciones aditivas con `pnpm db:migrate`, apuntando al entorno correcto. No usar `db:reset`.
 4. Preparar los archivos privados con `scripts/import-st-thomas.py`. Necesita Python, PyMuPDF, openpyxl, NumPy y SciPy. El script toma `--plan`, `--spreadsheet` y `--output`, reconstruye los límites CAD y produce `inventory.json`, `plan.png` y `audit.json`.
 

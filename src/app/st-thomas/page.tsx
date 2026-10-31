@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AccountMenu } from "@/components/st-thomas/AccountMenu";
 import { InventoryManager } from "@/components/st-thomas/InventoryManager";
 import { getAdminSession } from "@/lib/admin";
 import { isAuthConfigured } from "@/lib/auth";
@@ -40,6 +41,7 @@ export default async function StThomasPage() {
               St. Thomas
             </span>
           </div>
+          <AccountMenu />
         </nav>
         <header className="mb-8">
           <p className="mb-3 text-xs font-semibold tracking-[0.2em] uppercase">Administración</p>

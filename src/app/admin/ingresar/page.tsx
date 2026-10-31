@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/admin";
 import { isAuthConfigured } from "@/lib/auth";
-import { GoogleSignIn } from "./google-sign-in";
+import { PasswordSignIn } from "./password-sign-in";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -45,15 +45,12 @@ export default async function AdminSignInPage({
         <div className="border-t border-[#c9d0c4] pt-8">
           {available ? (
             <>
-              <p className="mb-5 text-sm leading-relaxed text-[#52665b]">
-                Usá tu cuenta de Google autorizada para ingresar.
-              </p>
               {error && (
                 <p role="alert" className="mb-5 text-sm leading-relaxed text-red-800">
-                  No pudimos validar tu acceso. Elegí la cuenta autorizada y volvé a intentarlo.
+                  No pudimos validar tu acceso. Volvé a intentarlo.
                 </p>
               )}
-              <GoogleSignIn />
+              <PasswordSignIn />
             </>
           ) : (
             <p role="status" className="text-sm leading-relaxed text-[#52665b]">
