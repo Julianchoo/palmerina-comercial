@@ -4,7 +4,7 @@
 
 El usuario quiere mejorar el estilo de Palmerina Comercial, cuya navegación y diseño cambian entre pestañas, sin cambiar mucho el contenido. El código confirma encabezados independientes en la portada, alquiler y St. Thomas, y un plano en iframe que ocupa toda la ventana.
 
-Se propone una identidad común tomando como referencia la portada actual: fondos crema, texto oscuro, detalles cobre, títulos serif y cuerpo con las fuentes ya cargadas. Se propone un encabezado compartido con marca, enlaces permanentes entre páginas, estado activo y menú móvil consistente. Los enlaces a secciones se presentan como navegación secundaria contextual.
+Se implementa una identidad común tomando como referencia la portada actual: fondos crema, texto oscuro, detalles cobre, títulos serif y cuerpo con las fuentes ya cargadas. Se propone un encabezado compartido con marca, enlaces permanentes entre páginas, estado activo y menú móvil consistente. Los enlaces a secciones se presentan como navegación secundaria contextual.
 
 ## Goals
 
@@ -46,3 +46,7 @@ Se propone una identidad común tomando como referencia la portada actual: fondo
 - `plano-comercial/plano.html` es fuente canónica; `scripts/sync-plano.mjs` genera `public/plano/` antes del build.
 - No agregar dependencias ni nuevas fuentes para este ajuste.
 - Producción despliega desde `main`; no declarar actualización publicada sin verificar el despliegue y su commit.
+
+## Ampliación aprobada por el usuario
+
+Agua azul y retirada de las rayas verdes añadidas en St. Thomas. El PDF adjunto permite identificar agua cian y anotaciones lima sin modificar árboles, datos ni polígonos comerciales. Corregir la visualización del raster privado en memoria del navegador; no publicar la imagen privada ni cambiar registros del inventario. Entregar además PDF vectorial corregido.

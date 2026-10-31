@@ -1,7 +1,7 @@
 # Action Required: Diseño coherente
 
-La propuesta fue aprobada por el usuario. No se requieren cambios de cuentas, claves ni permisos.
+Diseño y corrección del plano autorizados por el usuario. El PDF fuente fue recibido y permite completar agua azul y eliminar marcas verdes. No se necesitan cuentas, claves ni cambios de permisos.
 
-## Petición adicional
+## Publicación
 
-El usuario indicó que adjuntará el plano original de St. Thomas para delimitar el agua y colorearla de azul con precisión. El original no está en el repositorio ni en las fuentes conectadas; la imagen privada no pudo recuperarse.
+La revisión automática bloqueó actualizar main por disparar un despliegue de producción. Se requiere autorización explícita del usuario para fusionar el PR #6 y publicar. No cambiar main hasta obtenerla.

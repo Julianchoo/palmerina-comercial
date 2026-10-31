@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import styles from "./lot-map.module.css";
-import type { Lot, LotStatus, PlanMetadata } from "@/lib/st-thomas/types";
 import type { KeyboardEvent, PointerEvent } from "react";
+import type { Lot, LotStatus, PlanMetadata } from "@/lib/st-thomas/types";
+import styles from "./lot-map.module.css";
+import { preparePlanImage } from "./plan-colors";
 
 export interface LotMapProps {
   lots: Lot[];
@@ -45,11 +46,48 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
   const initial = { x: 0, y: 0, width: plan.width, height: plan.height };
   const [viewport, setViewport] = useState<Viewport>(initial);
   const viewportRef = useRef<Viewport>(initial);
-  const [imageState, setImageState] = useState<"loading" | "ready" | "error">("loading");
+  const [background, setBackground] = useState<{
+    source: string;
+    url: string | null;
+    state: "loading" | "ready" | "error";
+  } | null>(null);
+  const imageState = background?.source === imageUrl ? background.state : "loading";
+  const preparedUrl = background?.source === imageUrl ? background.url : null;
   const [hover, setHover] = useState<Hover | null>(null);
   const animation = useRef<number | null>(null);
   const selected = useMemo(() => lots.find((lot) => lot.id === selectedId), [lots, selectedId]);
   const selectedBounds = useMemo(() => selected ? bounds(selected) : null, [selected]);
+
+  useEffect(() => {
+    let disposed = false;
+    let objectUrl: string | null = null;
+    const source = new window.Image();
+    source.decoding = "async";
+    const failed = () => {
+      if (!disposed) setBackground({ source: imageUrl, url: null, state: "error" });
+    };
+    source.onload = () => {
+      void (async () => {
+        try {
+          const blob = await preparePlanImage(source);
+          if (disposed) return;
+          objectUrl = URL.createObjectURL(blob);
+          setBackground({ source: imageUrl, url: objectUrl, state: "loading" });
+        } catch {
+          failed();
+        }
+      })();
+    };
+    source.onerror = failed;
+    // Same-origin loading retains the existing administrator session checks.
+    source.src = imageUrl;
+    return () => {
+      disposed = true;
+      source.onload = null;
+      source.onerror = null;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [imageUrl]);
 
   const applyViewport = useCallback((next: Viewport) => {
     // Keep a little margin around the sheet while preventing the plan from being lost.
@@ -264,7 +302,7 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
           onLostPointerCapture={(event) => pointers.current.delete(event.pointerId)}
         >
           <title id={`${id}-title`}>Plano interactivo de St. Thomas, lotes y estado comercial</title>
-          <image className={styles.plan} href={imageUrl} width={plan.width} height={plan.height} x="0" y="0" preserveAspectRatio="none" onLoad={() => setImageState("ready")} onError={() => setImageState("error")} aria-hidden="true" />
+          {preparedUrl && <image className={styles.plan} href={preparedUrl} width={plan.width} height={plan.height} x="0" y="0" preserveAspectRatio="none" onLoad={() => setBackground((current) => current?.source === imageUrl ? { ...current, state: "ready" } : current)} onError={() => setBackground((current) => current?.source === imageUrl ? { ...current, state: "error" } : current)} aria-hidden="true" />}
           {imageState === "ready" && lots.map((lot) => {
             const active = lot.id === selectedId;
             const status = STATUS[lot.status];
@@ -329,3 +367,4 @@ export function LotMap({ lots, plan, selectedId, onSelect, imageUrl = "/api/st-t
     </section>
   );
 }
+

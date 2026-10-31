@@ -28,7 +28,7 @@
 .svg { display: block; width: 100%; height: clamp(440px, 70vh, 780px); touch-action: none; user-select: none; cursor: grab; }
 .svg:active { cursor: grabbing; }
 .svg:focus-visible { outline: 2px solid #2f6b50; outline-offset: -3px; }
-/* Preserve source hues, including water colors; parcel status colors remain separate SVG overlays. */
+/* The prepared background keeps water blue; status colors are separate SVG overlays. */
 .plan { filter: contrast(.85) brightness(1.06); opacity: .7; }
 
 .parcel { cursor: pointer; transition: fill-opacity .18s ease, stroke-width .18s ease; }
