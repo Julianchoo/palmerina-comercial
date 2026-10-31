@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
-import { Navbar } from "@/components/shared/Navbar";
-import { HeroSection } from "@/components/shared/HeroSection";
-import { LocationSection } from "@/components/shared/LocationSection";
+import { ConstructivoSection } from "@/components/alquiler/ConstructivoSection";
+import { ModulosGrid } from "@/components/alquiler/ModulosGrid";
+import { ProyectoSection } from "@/components/alquiler/ProyectoSection";
+import { VentajasSection } from "@/components/alquiler/VentajasSection";
 import { CtaSection } from "@/components/shared/CtaSection";
 import { Footer } from "@/components/shared/Footer";
-import { ProyectoSection } from "@/components/alquiler/ProyectoSection";
-import { ModulosGrid } from "@/components/alquiler/ModulosGrid";
-import { ConstructivoSection } from "@/components/alquiler/ConstructivoSection";
-import { VentajasSection } from "@/components/alquiler/VentajasSection";
+import { HeroSection } from "@/components/shared/HeroSection";
+import { LocationSection } from "@/components/shared/LocationSection";
+import { SiteHeader } from "@/components/shared/SiteHeader";
+import styles from "./alquiler.module.css";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Alquiler de Módulos – Paseo Comercial La Palmerina",
@@ -37,33 +38,38 @@ const heroStats = [
 
 export default function AlquilerPage() {
   return (
-    <>
-      <Navbar navLinks={navLinks} />
-
-      <HeroSection
-        backgroundImage="/images/zoomout3.png"
-        badge="Paseo Comercial · Canning, Buenos Aires"
-        title={
-          <>
-            Tu local en el corazón
-            <br />
-            del <span className="text-gradient-accent">corredor sur</span>
-          </>
-        }
-        subtitle="Módulos comerciales de 200, 400 y 600m² en el Paseo Comercial La Palmerina. Diseño open-air, visibilidad máxima desde Ruta 58 y acceso desde la Autopista Presidente Perón."
-        stats={heroStats}
-        ctaSecondaryLabel="Ver módulos"
-        ctaSecondaryHref="#modulos"
-        page="alquiler"
-      />
-
-      <ProyectoSection />
-      <ModulosGrid />
-      <ConstructivoSection />
-      <LocationSection />
-      <VentajasSection />
-      <CtaSection page="alquiler" />
+    <div className={styles.page}>
+      <a href="#contenido" className={styles.skipLink}>
+        Ir al contenido
+      </a>
+      <SiteHeader sectionLinks={navLinks} />
+      <main id="contenido" tabIndex={-1}>
+        <div className={styles.hero}>
+          <HeroSection
+            backgroundImage="/images/zoomout3.png"
+            badge="Paseo Comercial · Canning, Buenos Aires"
+            title={
+              <>
+                Tu local en el corazón
+                <br />
+                del <span className="text-gradient-accent">corredor sur</span>
+              </>
+            }
+            subtitle="Módulos comerciales de 200, 400 y 600m² en el Paseo Comercial La Palmerina. Diseño open-air, visibilidad máxima desde Ruta 58 y acceso desde la Autopista Presidente Perón."
+            stats={heroStats}
+            ctaSecondaryLabel="Ver módulos"
+            ctaSecondaryHref="#modulos"
+            page="alquiler"
+          />
+        </div>
+        <ProyectoSection />
+        <ModulosGrid />
+        <ConstructivoSection />
+        <LocationSection />
+        <VentajasSection />
+        <CtaSection page="alquiler" />
+      </main>
       <Footer variant="alquiler" />
-    </>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { SiteHeader } from "@/components/shared/SiteHeader";
 import { AccountMenu } from "@/components/st-thomas/AccountMenu";
 import { InventoryManager } from "@/components/st-thomas/InventoryManager";
 import { getAdminSession } from "@/lib/admin";
@@ -24,37 +24,27 @@ export default async function StThomasPage() {
   if (!authorized) redirect("/admin/ingresar");
 
   return (
-    <main className="min-h-screen bg-[#f3f1e9] px-4 py-8 text-[#233e33] sm:px-8 lg:px-12">
-      <div className="mx-auto max-w-7xl">
-        <nav className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <Link href="/" className="text-sm font-semibold tracking-wide hover:underline">
-            ← La Palmerina
-          </Link>
-          <div className="flex items-center gap-1 rounded-full bg-[#21483c]/10 p-1 text-sm font-medium">
-            <Link href="/" className="rounded-full px-4 py-1.5 text-[#52665b] hover:text-[#233e33]">
-              Inversión
-            </Link>
-            <Link href="/alquiler" className="rounded-full px-4 py-1.5 text-[#52665b] hover:text-[#233e33]">
-              Alquiler
-            </Link>
-            <span aria-current="page" className="rounded-full bg-[#21483c] px-4 py-1.5 text-white">
-              St. Thomas
-            </span>
-          </div>
-          <AccountMenu />
-        </nav>
-        <header className="mb-8">
-          <p className="mb-3 text-xs font-semibold tracking-[0.2em] uppercase">Administración</p>
-          <h1 className="text-4xl leading-tight sm:text-5xl" style={{ fontFamily: "Georgia, serif" }}>
-            Lotes en St. Thomas
-          </h1>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#52665b]">
-            Plano del loteo con el estado de cada lote. Elegí una parcela para ver sus datos y editar
-            precio, estado y observaciones.
-          </p>
-        </header>
-        <InventoryManager />
-      </div>
-    </main>
+    <>
+      <a href="#contenido-inventario" className="fixed top-3 left-5 z-[100] -translate-y-32 bg-[var(--palmerina-cream)] px-5 py-3 text-[var(--palmerina-ink)] focus:translate-y-0">
+        Ir al inventario
+      </a>
+      <SiteHeader accountSlot={<AccountMenu />} />
+      <main id="contenido-inventario" tabIndex={-1} className="min-h-[calc(100dvh-var(--palmerina-header-height))] scroll-mt-[var(--palmerina-anchor-offset)] bg-[var(--palmerina-cream)] px-4 py-10 text-[var(--palmerina-ink)] sm:px-8 sm:py-14 lg:px-12">
+        <div className="mx-auto max-w-7xl">
+          <header className="mb-9 border-b border-[var(--palmerina-line)] pb-8">
+            <p className="mb-3 text-xs font-medium tracking-[0.18em] text-[var(--palmerina-copper-dark)] uppercase">Administración</p>
+            <h1 className="text-4xl leading-tight font-normal tracking-[-0.04em] text-balance sm:text-5xl" style={{ fontFamily: "Georgia, serif" }}>
+              Lotes en St. Thomas
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--palmerina-muted)]">
+              Plano del loteo con el estado de cada lote. Elegí una parcela para ver sus datos y editar
+              precio, estado y observaciones.
+            </p>
+          </header>
+          <InventoryManager />
+        </div>
+      </main>
+    </>
   );
 }
+

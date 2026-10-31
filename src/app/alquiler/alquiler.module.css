@@ -1,0 +1,299 @@
+.page {
+  /* Scope the existing commercial components to the shared editorial palette. */
+  --color-brand-primary: #4a5144;
+  --color-brand-primary-light: #64665e;
+  --color-brand-primary-dark: #30382d;
+  --color-brand-accent: var(--palmerina-copper);
+  --color-brand-accent-dark: var(--palmerina-copper-dark);
+  --color-brand-dark: var(--palmerina-ink);
+  --color-brand-dark-secondary: #24291f;
+  --font-inter: Georgia, "Times New Roman", serif;
+  --shadow-card-md: 0 4px 18px rgb(24 26 23 / 5%);
+  --shadow-card-lg: 0 6px 24px rgb(24 26 23 / 7%);
+  color: var(--palmerina-ink);
+  background: var(--palmerina-cream);
+  font-family: var(--font-roboto), sans-serif;
+  line-height: 1.65;
+}
+
+.page h1,
+.page h2,
+.page h3 {
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.page h1 {
+  font-size: clamp(48px, 6.6vw, 92px);
+}
+.page h2 {
+  font-size: clamp(38px, 4.2vw, 64px);
+}
+.page h3 {
+  font-size: clamp(24px, 2.3vw, 32px);
+}
+
+.page main > section {
+  padding-block: clamp(66px, 7.3vw, 105px);
+  border-bottom: 1px solid var(--palmerina-line);
+  scroll-margin-top: var(--palmerina-anchor-offset);
+}
+
+.page main > section > div,
+.page footer > div {
+  max-width: 1440px;
+  padding-inline: 5.6%;
+}
+
+.page :global(.bg-white) {
+  background-color: var(--palmerina-surface);
+}
+.page :global(.bg-gray-50) {
+  background-color: var(--palmerina-cream);
+}
+
+/* Tailwind's inline theme compiles these legacy colors to literals. Keep
+   their overrides local to this page rather than changing public/auth tokens. */
+.page [class~="text-brand-dark"],
+.page [class~="text-brand-primary"] {
+  color: var(--palmerina-ink);
+}
+.page [class~="text-brand-dark/55"],
+.page [class~="text-brand-dark/60"],
+.page [class~="text-brand-dark/65"],
+.page [class~="text-brand-dark/70"] {
+  color: var(--palmerina-muted);
+}
+.page [class~="text-brand-accent"] {
+  color: var(--palmerina-copper-dark);
+}
+.page [class~="bg-brand-primary"],
+.page [class~="bg-brand-dark"] {
+  background-color: var(--palmerina-ink);
+}
+.page [class~="bg-brand-primary/10"],
+.page [class~="bg-brand-primary/[0.03]"] {
+  background-color: #e9e5d9;
+}
+.page [class~="bg-brand-accent"] {
+  background-color: var(--palmerina-copper);
+}
+.page [class~="border-brand-primary/10"],
+.page [class~="border-brand-primary/20"],
+.page [class~="border-brand-dark/10"] {
+  border-color: var(--palmerina-line);
+}
+
+/* Keep the carousel thumbnail strip scrollable at tablet widths, where
+   its eight fixed-size buttons no longer fit on a single centered row. */
+.page section[id="proyecto"] :global(.overflow-x-auto) {
+  justify-content: safe center;
+  overflow-x: auto;
+}
+
+.page :global(.bg-gradient-dark),
+.page :global(.bg-gradient-brand) {
+  background: #20251e;
+}
+
+.page :global(.text-gradient-accent) {
+  background: none;
+  color: var(--palmerina-copper-dark);
+  -webkit-text-fill-color: currentColor;
+}
+
+.page :global(.rounded-2xl) {
+  border-radius: 4px;
+}
+.page :global(.rounded-\[1\.75rem\]) {
+  border-radius: 4px;
+}
+
+.page main > section > div > div > span:first-child {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--palmerina-copper-dark);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.page main a[href^="https://wa.me/"] {
+  min-height: 54px;
+  padding: 14px 22px;
+  border: 1px solid var(--palmerina-copper);
+  border-radius: 0;
+  background: var(--palmerina-copper);
+  color: var(--palmerina-ink);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+
+.page main a[href^="https://wa.me/"]:hover {
+  border-color: #cfab83;
+  background: #cfab83;
+}
+
+.page a:focus-visible,
+.page button:focus-visible {
+  outline: 2px solid var(--palmerina-copper-dark);
+  outline-offset: 4px;
+}
+
+.hero > section {
+  min-height: max(650px, calc(100svh - var(--palmerina-header-height) - 44px));
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.hero :global(.bg-gradient-overlay) {
+  background:
+    linear-gradient(90deg, #0d130fdb, #0d130f4d),
+    linear-gradient(0deg, #0d130fb3, transparent 85%);
+}
+
+.hero > section > div:nth-child(2) {
+  width: 100%;
+  max-width: 1440px;
+  padding: 80px 5.6% 100px;
+  text-align: left;
+}
+
+.hero h1 {
+  max-width: 1000px;
+}
+.hero :global(.text-gradient-accent) {
+  color: #ecd2b5;
+}
+.hero p {
+  margin-left: 0;
+  font-size: 17px;
+  line-height: 1.75;
+}
+.hero > section > div:nth-child(2) > div:first-child {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #e4c4a2;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.hero h1 + p + div {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.hero a[href="#modulos"] {
+  min-height: 54px;
+  padding: 14px 22px;
+  border: 1px solid #f3efe580;
+  border-radius: 0;
+  font-size: 13px;
+  font-weight: 500;
+}
+.hero :global(.grid-cols-3) {
+  max-width: 600px;
+  padding-top: 28px;
+  border-top: 1px solid #f3efe538;
+}
+.hero :global(.grid-cols-3) > div {
+  text-align: left;
+}
+.hero :global(.grid-cols-3) :global(.font-bold) {
+  font-weight: 400;
+}
+
+.page section[id="ventajas"],
+.page section[id="contacto"] {
+  border-color: #f3efe526;
+}
+.page section[id="ventajas"] :global(.text-gradient-accent),
+.page section[id="ventajas"] > div > div > span:first-child,
+.page section[id="contacto"] :global(.text-gradient-accent) {
+  color: #ecd2b5;
+}
+.page section[id="ventajas"] h3 {
+  font-size: 27px;
+}
+.page footer {
+  padding-block: 54px 30px;
+}
+.page footer [class~="text-brand-accent"] {
+  color: #d5af88;
+}
+.page footer h3 {
+  font-size: 32px;
+}
+.page footer h4 {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.skipLink {
+  position: fixed;
+  top: 16px;
+  left: 20px;
+  z-index: 100;
+  padding: 12px 20px;
+  background: var(--palmerina-cream);
+  color: var(--palmerina-ink);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.skipLink:focus {
+  clip-path: none;
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+
+@media (max-width: 1000px) {
+  .hero > section {
+    min-height: 650px;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero > section > div:nth-child(2) {
+    padding: 65px 24px 105px;
+  }
+  .page main > section > div,
+  .page footer > div {
+    padding-inline: 24px;
+  }
+  .hero p {
+    font-size: 15px;
+  }
+  .hero :global(.grid-cols-3) {
+    gap: 16px;
+  }
+  .hero :global(.grid-cols-3) :global(.text-sm) {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page *,
+  .page *::before,
+  .page *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
